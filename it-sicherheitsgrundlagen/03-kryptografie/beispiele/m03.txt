@@ -1,0 +1,34 @@
+# Testumgebung: Ubuntu 24.04 (Container), keine Windows-VM; sha256sum aus GNU coreutils, OpenSSL 3.0.13
+$ echo "Dies ist eine Testdatei" > datei.txt; sha256sum datei.txt
+f93e8b10940bf88611a34eca48ed2db1b0384a3081556459e5d7909963d27276  datei.txt
+$ sed -i "s/Testdatei/Testdatci/" datei.txt; sha256sum datei.txt    # ein Zeichen geaendert
+9aecf1b7279fb974a7a1944e3e3d0106b8649fb8c38f8cdd1e8c79a5ed9b82af  datei.txt
+$ openssl genrsa -out private.pem 3072; openssl rsa -in private.pem -pubout -out public.pem; chmod 600 private.pem
+writing RSA key
+$ openssl rsa -in private.pem -noout -check
+RSA key ok
+$ ls -l private.pem public.pem
+-rw------- root root 2484 private.pem
+-rw-r--r-- root root 625 public.pem
+$ head -1 public.pem
+-----BEGIN PUBLIC KEY-----
+# Zusatz der Ausarbeitung (Einheiten 3.1 bis 3.3), OpenSSL 3.0.13
+$ openssl dgst -sha256 -sign private.pem -out datei.sig datei.txt; openssl dgst -sha256 -verify public.pem -signature datei.sig datei.txt
+Verified OK
+$ (ein Zeichen in datei.txt geaendert) openssl dgst -sha256 -verify public.pem -signature datei.sig datei.txt
+Verification failure          (Exit-Code 1; davor zwei OpenSSL-Fehlerzeilen "bad signature")
+$ openssl pkeyutl -encrypt -pubin -inkey public.pem -pkeyopt rsa_padding_mode:oaep -in klein.txt -out klein.enc; ls -l klein.enc
+-rw-r--r-- 1 root root 384 klein.enc          (RSA-3072: immer 384 Byte, egal wie kurz der Klartext)
+$ openssl pkeyutl -decrypt -inkey private.pem -pkeyopt rsa_padding_mode:oaep -in klein.enc
+geheim
+$ openssl enc -aes-256-cbc -pbkdf2 -salt -in datei.txt -out datei.enc -pass env:LABPW      # im Test mit Umgebungsvariable statt Eingabeaufforderung
+$ ls -l datei.enc       # 48 Byte
+$ openssl enc -d -aes-256-cbc -pbkdf2 -in datei.enc -pass env:LABPW        # richtiges Kennwort
+Dies ist eine Testdatei
+$ (falsches Kennwort)   # Meldung "bad decrypt", Exit-Code 1
+$ openssl req -x509 -newkey rsa:3072 -nodes -keyout k.pem -out cert.pem -days 30 -subj "/CN=vm-linux.example.com"
+$ openssl x509 -in cert.pem -noout -subject -issuer -dates
+subject=CN = vm-linux.example.com
+issuer=CN = vm-linux.example.com
+notBefore=Nov 13 03:09:40 2026 GMT
+notAfter=Dec 13 03:09:40 2026 GMT

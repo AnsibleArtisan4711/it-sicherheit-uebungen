@@ -1,0 +1,6 @@
+Assetwert 50000 EUR, Expositionsfaktor 40 %, ARO 0,5
+SLE = 20000 EUR
+ALE = 10000 EUR   (Kontrollwert des Lehrplans: 10000 EUR)
+
+Maßnahme (Beispiel) kostet 3000 EUR pro Jahr und senkt die ARO auf 0,1
+ALE danach = 2000 EUR; Einsparung = 8000 EUR; Nutzen minus Kosten = 5000 EUR

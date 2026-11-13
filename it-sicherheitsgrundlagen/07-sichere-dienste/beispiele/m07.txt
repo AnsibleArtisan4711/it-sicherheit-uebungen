@@ -1,0 +1,43 @@
+# Testumgebung: OpenSSH 9.6p1 (Ubuntu), sshd im Namespace lin auf Port 2222 (ohne PAM, ohne systemd); der Windows-Client wurde durch ssh im Namespace cli ersetzt
+$ ssh-keygen -t ed25519    # Fingerabdruck des Test-Schluessels (ohne Passphrase)
+256 SHA256:64DB+NxcK6Ah6XDcuKNvYRmjmO8ST+JSjIh6t8kE4qE (ED25519)
+$ sudo sshd -t -f sshd_config
+(keine Ausgabe, Exit-Code 0)
+$ ssh -i id_ed25519 anna@192.168.50.20 id
+uid=30033(anna) gid=30033(anna) groups=30033(anna),30002(projekt)
+$ ssh -o PubkeyAuthentication=no anna@192.168.50.20
+anna@192.168.50.20: Permission denied (publickey,keyboard-interactive).
+$ ssh -i id_ed25519 root@192.168.50.20   # PermitRootLogin no
+root@192.168.50.20: Permission denied (publickey,keyboard-interactive).
+$ ssh -i id_ed25519 hacker@192.168.50.20   # Benutzer existiert nicht
+hacker@192.168.50.20: Permission denied (publickey,keyboard-interactive).
+# Auszug aus dem sshd-Log (Zeitstempel entfernt):
+Accepted publickey for anna from 192.168.50.30 port 40792 ssh2: ED25519 SHA256:64DB+NxcK6Ah6XDcuKNvYRmjmO8ST+JSjIh6t8kE4qE
+Received disconnect from 192.168.50.30 port 40792:11: disconnected by user
+Disconnected from user anna 192.168.50.30 port 40792
+Connection closed by authenticating user anna 192.168.50.30 port 40806 [preauth]
+Connection closed by authenticating user root 192.168.50.30 port 40812 [preauth]
+Invalid user hacker from 192.168.50.30 port 40814
+Connection closed by invalid user hacker 192.168.50.30 port 40814 [preauth]
+# Zusatz (Ausarbeitung): dieselbe Konfiguration mit der Zeile 'KbdInteractiveAuthentication no'
+$ ssh -o PubkeyAuthentication=no anna@192.168.50.20
+anna@192.168.50.20: Permission denied (publickey).
+$ ssh -i id_ed25519 anna@192.168.50.20 id
+uid=30033(anna) gid=30033(anna) groups=30033(anna),30002(projekt)
+# Zusatz der Ausarbeitung (Einheit 7.3): TLS mit selbstsigniertem Zertifikat aus Modul 3 (openssl s_server auf Port 8443, nur lokal)
+$ openssl s_client -connect 127.0.0.1:8443 -servername vm-linux.example.com < /dev/null
+verify error:num=18:self-signed certificate
+New, TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384
+Verify return code: 18 (self-signed certificate)
+$ openssl s_client -connect 127.0.0.1:8443 -CAfile cert.pem -verify_hostname vm-linux.example.com < /dev/null
+Verification: OK
+Verify return code: 0 (ok)
+$ curl -sS https://127.0.0.1:8443/        # ohne -k, ohne Vertrauensanker
+curl: (60) SSL certificate problem: self-signed certificate
+# Zusatz der Ausarbeitung: wirksame Werte anzeigen (zeigt auch, was Include-Dateien ueberschreiben)
+$ sudo sshd -T -f sshd_config | grep -iE "^(passwordauthentication|permitrootlogin|pubkeyauthentication|kbdinteractiveauthentication|maxauthtries)"
+maxauthtries 6
+permitrootlogin no
+pubkeyauthentication yes
+passwordauthentication no
+kbdinteractiveauthentication no

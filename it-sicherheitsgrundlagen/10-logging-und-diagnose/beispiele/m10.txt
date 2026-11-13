@@ -1,0 +1,12 @@
+# Testumgebung: tcpdump 4.99.4 statt Wireshark; python http.server (Port 80, unverschluesselt) statt Apache; Namespaces lin und cli
+$ tcpdump -i eth0 -n -A host 192.168.50.30 and tcp port 80     # in VM-LINUX, waehrend: curl http://192.168.50.20/ (in VM-WIN-CLIENT)
+GET / HTTP/1.1
+Host: 192.168.50.20
+User-Agent: curl/8.5.0
+HTTP/1.0 200 OK
+Server: SimpleHTTP/0.6 Python/3.13.18
+Content-type: text/html; charset=utf-8
+(Klartext: Anfrage und Antwort sind im Mitschnitt lesbar)
+$ tcpdump -i eth0 -n -A tcp port 2222        # waehrend: ssh -i id_ed25519 anna@192.168.50.20 id
+      2 SSH-2.0-OpenSSH_9.6p1
+Pakete mit 'uid=' im Klartext: 0

@@ -1,0 +1,22 @@
+Nov 12 08:02:11 vm-linux sshd[1531]: Accepted publickey for anna from 192.168.50.30 port 40792 ssh2: ED25519 SHA256:EXAMPLEFINGERPRINTEXAMPLEFINGERPRINT0000000
+Nov 12 08:41:30 vm-linux sshd[1531]: Received disconnect from 192.168.50.30 port 40792:11: disconnected by user
+Nov 12 08:41:30 vm-linux sshd[1531]: Disconnected from user anna 192.168.50.30 port 40792
+Nov 12 13:20:05 vm-linux sshd[1703]: Invalid user admin from 192.168.50.99 port 51107
+Nov 12 13:20:05 vm-linux sshd[1703]: Failed password for invalid user admin from 192.168.50.99 port 51107 ssh2
+Nov 12 13:20:09 vm-linux sshd[1706]: Invalid user admin from 192.168.50.99 port 51114
+Nov 12 13:20:09 vm-linux sshd[1706]: Failed password for invalid user admin from 192.168.50.99 port 51114 ssh2
+Nov 12 13:20:14 vm-linux sshd[1709]: Failed password for root from 192.168.50.99 port 51121 ssh2
+Nov 12 13:20:18 vm-linux sshd[1712]: Failed password for root from 192.168.50.99 port 51128 ssh2
+Nov 12 13:20:23 vm-linux sshd[1715]: Invalid user test from 192.168.50.99 port 51135
+Nov 12 13:20:23 vm-linux sshd[1715]: Failed password for invalid user test from 192.168.50.99 port 51135 ssh2
+Nov 12 13:20:27 vm-linux sshd[1718]: Invalid user test from 192.168.50.99 port 51142
+Nov 12 13:20:27 vm-linux sshd[1718]: Failed password for invalid user test from 192.168.50.99 port 51142 ssh2
+Nov 12 13:20:31 vm-linux sshd[1721]: Invalid user oracle from 192.168.50.99 port 51149
+Nov 12 13:20:31 vm-linux sshd[1721]: Failed password for invalid user oracle from 192.168.50.99 port 51149 ssh2
+Nov 12 13:20:36 vm-linux sshd[1724]: Failed password for ubuntu from 192.168.50.99 port 51156 ssh2
+Nov 12 13:20:40 vm-linux sshd[1727]: Failed password for ubuntu from 192.168.50.99 port 51163 ssh2
+Nov 12 13:20:44 vm-linux sshd[1730]: Failed password for anna from 192.168.50.99 port 51170 ssh2
+Nov 12 13:21:02 vm-linux sshd[1802]: Accepted publickey for anna from 192.168.50.30 port 40921 ssh2: ED25519 SHA256:EXAMPLEFINGERPRINTEXAMPLEFINGERPRINT0000000
+Nov 12 15:07:44 vm-linux sshd[1911]: Failed password for anna from 192.168.50.30 port 41002 ssh2
+Nov 12 15:07:52 vm-linux sshd[1914]: Accepted password for ben from 192.168.50.30 port 41010 ssh2
+Nov 12 15:30:00 vm-linux sshd[1920]: Connection closed by authenticating user root 192.168.50.30 port 41050 [preauth]

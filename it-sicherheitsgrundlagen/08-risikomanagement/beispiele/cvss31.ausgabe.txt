@@ -1,0 +1,14 @@
+Selbsttest (Vergleichswerte aus dem Gedächtnis des Verfassers):
+  ok   9.8 (erwartet  9.8)  CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+  ok  10.0 (erwartet 10.0)  CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H
+  ok   7.8 (erwartet  7.8)  CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H
+  ok   5.5 (erwartet  5.5)  CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H
+  ok   6.1 (erwartet  6.1)  CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+  ok   6.5 (erwartet  6.5)  CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N
+  ok   9.1 (erwartet  9.1)  CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N
+Abweichungen: 0
+
+Vektoren aus schwachstellenbericht.md:
+  FIKTIV-2026-0001   9.1 Critical `web01`, öffentlicher Webserver (DMZ, aus dem Internet erreichbar)
+  FIKTIV-2026-0002   9.8 Critical `print01`, interner Druckserver (nur im Büro-VLAN erreichbar, keine personenbezogenen Daten, per Firewall von Server-VLAN getrennt)
+  FIKTIV-2026-0003   7.8 High     `file01`, interner Dateiserver (enthält Personaldaten der Abteilung HR)

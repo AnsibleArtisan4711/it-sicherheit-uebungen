@@ -1,0 +1,23 @@
+Return-Path: <it-helpdesk@med.example.com>
+Received: from mail.med.example.com (mail.med.example.com [192.0.2.25])
+	by mx.med.example.com with ESMTP; Wed, 11 Nov 2026 09:03:17 +0100
+Authentication-Results: mx.med.example.com;
+	spf=pass smtp.mailfrom=med.example.com;
+	dkim=pass header.d=med.example.com;
+	dmarc=pass header.from=med.example.com
+From: "IT-Helpdesk" <it-helpdesk@med.example.com>
+To: <alle-mitarbeiter@med.example.com>
+Subject: Wartungsfenster am Samstag, 14.11.2026
+Date: Wed, 11 Nov 2026 09:03:02 +0100
+Message-ID: <20261111090302.55E1@mail.med.example.com>
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+
+<html><body>
+<p>Guten Tag,</p>
+<p>am Samstag, 14.11.2026, zwischen 22:00 und 24:00 Uhr werden die Server gepatcht.
+Das Intranet ist in dieser Zeit nicht erreichbar. Details finden Sie im Intranet:</p>
+<p><a href="https://intranet.med.example.com/wartung">https://intranet.med.example.com/wartung</a></p>
+<p>Bei Fragen erreichen Sie uns unter Telefon 100.</p>
+<p>Ihr IT-Helpdesk</p>
+</body></html>

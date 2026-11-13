@@ -1,0 +1,30 @@
+# Testumgebung: Ubuntu 24.04 (Container), als root; Windows-NTFS-Teil nicht ausfuehrbar
+$ groupadd projekt; useradd -m -s /bin/bash anna; useradd -m -s /bin/bash ben; usermod -aG projekt anna
+$ id anna; id ben
+uid=30033(anna) gid=30033(anna) groups=30033(anna),30002(projekt)
+uid=30034(ben) gid=30034(ben) groups=30034(ben)
+$ mkdir /srv/projekt; chgrp projekt /srv/projekt; chmod 750 /srv/projekt; echo Planung > /srv/projekt/notiz.txt; chgrp projekt /srv/projekt/notiz.txt; chmod 640 /srv/projekt/notiz.txt
+$ ls -ld /srv/projekt
+drwxr-x--- 2 root projekt 4096 Nov 13 03:59 /srv/projekt
+$ sudo -u anna ls /srv/projekt
+notiz.txt
+$ sudo -u ben ls /srv/projekt
+ls: cannot open directory '/srv/projekt': Permission denied
+$ ls -lR /srv/projekt > soll-posix.txt     # Variante des Lehrplans
+/srv/projekt:
+total 4
+-rw-r----- 1 root projekt 8 Nov 13 03:59 notiz.txt
+$ find /srv/projekt -printf "%M %u %g %p\n" | sort > soll-posix-find.txt     # Variante der Ausarbeitung (zeigt auch das Verzeichnis selbst)
+-rw-r----- root projekt /srv/projekt/notiz.txt
+drwxr-x--- root projekt /srv/projekt
+$ touch /tmp/t644 && chmod 644 /tmp/t644 && stat -c "%A %a" /tmp/t644
+-rw-r--r-- 644
+# Abweichung (c) aus Modul 12: chmod 777 /srv/projekt
+$ diff soll-posix.txt ist-posix.txt      # ls -lR: KEIN Unterschied
+(Exit-Code: 0)
+$ diff soll-posix-find.txt ist-posix-find.txt
+2c2
+< drwxr-x--- root projekt /srv/projekt
+---
+> drwxrwxrwx root projekt /srv/projekt
+(Exit-Code: 1)

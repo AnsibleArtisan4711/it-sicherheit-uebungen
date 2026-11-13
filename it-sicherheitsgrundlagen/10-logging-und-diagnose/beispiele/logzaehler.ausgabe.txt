@@ -1,0 +1,9 @@
+Fehlversuche je Quelladresse:
+  192.168.50.99    10   <-- ab Schwelle, prüfen
+  192.168.50.30     1
+Fehlversuche je Benutzername: {'admin': 2, 'root': 2, 'test': 2, 'ubuntu': 2, 'anna': 2, 'oracle': 1}
+Nicht existierende Benutzernamen: admin, oracle, test
+Erfolgreiche Anmeldungen:
+  Nov 12 08:02:11  anna  von 192.168.50.30  (publickey)
+  Nov 12 13:21:02  anna  von 192.168.50.30  (publickey)
+  Nov 12 15:07:52  ben   von 192.168.50.30  (password)   <-- Passwort-Anmeldung

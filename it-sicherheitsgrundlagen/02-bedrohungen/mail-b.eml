@@ -1,0 +1,25 @@
+Return-Path: <h.berger@med.example.com.test-relay.invalid>
+Received: from smtp.relay-test.invalid (smtp.relay-test.invalid [198.51.100.77])
+	by mx.med.example.com with ESMTP; Tue, 10 Nov 2026 16:48:09 +0100
+Authentication-Results: mx.med.example.com;
+	spf=softfail smtp.mailfrom=med.example.com.test-relay.invalid;
+	dkim=none;
+	dmarc=none header.from=med.example.com.test-relay.invalid
+From: "Helga Berger (Geschäftsführung)" <h.berger@med.example.com.test-relay.invalid>
+To: <buchhaltung@med.example.com>
+Subject: Vertraulich: Überweisung Lieferant heute noch erledigen
+Date: Tue, 10 Nov 2026 16:47:55 +0100
+Message-ID: <20261110164755.7C3D@relay-test.invalid>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+
+Hallo Frau Winkler,
+
+ich sitze gerade in einem Termin und bin telefonisch nicht erreichbar.
+Bitte überweisen Sie heute noch 18.400 EUR an den neuen Lieferanten
+(IBAN siehe Anhang). Die Sache ist vertraulich, bitte sprechen Sie mit
+niemandem darüber, auch nicht mit der Buchhaltungsleitung.
+Eine Bestätigung per Antwort genügt.
+
+Danke und Gruß
+Helga Berger

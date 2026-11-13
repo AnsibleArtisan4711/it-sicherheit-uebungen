@@ -1,0 +1,20 @@
+== mail-a.eml: DRINGEND: Ihr Konto wird in 24 Stunden gesperrt
+   Anzahl Befunde: 7
+   - Absender-Domain 'med-example.invalid' ähnelt 'med.example.com', ist aber eine andere
+   - Reply-To ('freemail-test.invalid') weicht von From ('med-example.invalid') ab
+   - SPF: fail
+   - DKIM: none
+   - DMARC: fail
+   - Link-Text zeigt 'med.example.com', Ziel ist 'med-example.invalid'
+   - Druck-/Dringlichkeitswörter: dringend, sofort, 24 stunden, gesperrt, unwiderruflich
+== mail-b.eml: Vertraulich: Überweisung Lieferant heute noch erledigen
+   Anzahl Befunde: 6
+   - Absender-Domain 'med.example.com.test-relay.invalid' ähnelt 'med.example.com', ist aber eine andere
+   - SPF: softfail
+   - DKIM: none
+   - DMARC: none
+   - Text verweist auf einen Anhang, es ist aber keiner vorhanden
+   - Druck-/Dringlichkeitswörter: heute noch, vertraulich, nicht erreichbar
+== mail-c.eml: Wartungsfenster am Samstag, 14.11.2026
+   Anzahl Befunde: 1
+   - Druck-/Dringlichkeitswörter: nicht erreichbar

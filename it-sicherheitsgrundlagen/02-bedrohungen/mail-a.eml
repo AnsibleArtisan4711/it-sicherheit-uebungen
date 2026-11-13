@@ -1,0 +1,23 @@
+Return-Path: <sicherheit@med-example.invalid>
+Received: from mail.hoster-test.invalid (mail.hoster-test.invalid [203.0.113.45])
+	by mx.med.example.com with ESMTP; Mon, 09 Nov 2026 06:12:41 +0100
+Authentication-Results: mx.med.example.com;
+	spf=fail smtp.mailfrom=med-example.invalid;
+	dkim=none;
+	dmarc=fail header.from=med-example.invalid
+From: "IT-Sicherheit Klinikum" <sicherheit@med-example.invalid>
+Reply-To: <konto-pruefung@freemail-test.invalid>
+To: <alle-mitarbeiter@med.example.com>
+Subject: DRINGEND: Ihr Konto wird in 24 Stunden gesperrt
+Date: Mon, 09 Nov 2026 06:12:30 +0100
+Message-ID: <20261109061230.1A2B@hoster-test.invalid>
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+
+<html><body>
+<p>Sehr geehrte Damen und Herren,</p>
+<p>aufgrund eines Sicherheitsvorfalls wird Ihr Konto <b>innerhalb von 24 Stunden gesperrt</b>.
+Bestätigen Sie sofort Ihr Kennwort, sonst gehen Ihre Daten unwiderruflich verloren.</p>
+<p><a href="http://med-example.invalid/login/verify?id=88213">https://med.example.com/konto-pruefen</a></p>
+<p>Mit freundlichen Grüßen<br>Ihr IT-Sicherheitsteam</p>
+</body></html>
