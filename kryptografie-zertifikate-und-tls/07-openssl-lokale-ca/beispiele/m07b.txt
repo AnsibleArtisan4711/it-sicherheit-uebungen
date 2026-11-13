@@ -1,0 +1,34 @@
+# Ausgaben aus der Testumgebung (Ubuntu 24.04, OpenSSL 3.0.13, Namespaces linux01/win11, siehe testlabor16.sh); keine Aufzeichnung von Hyper-V oder Windows. Zeitstempel, Hashwerte, Schlüssel und Seriennummern ändern sich bei jedem Lauf.
+$ openssl ca -config ca.cnf -gencrl -out lab.crl 2>&1 | tail -1; openssl crl -in lab.crl -noout -text | grep -E 'Issuer|Last Update|Next Update|No Revoked|Revoked Certificates'
+Using configuration from ca.cnf
+        Issuer: CN = Lab Root CA
+        Last Update: Nov 13 03:50:28 2026 GMT
+        Next Update: Nov 20 03:50:28 2026 GMT
+No Revoked Certificates.
+$ openssl x509 -in server.crt -noout -serial
+serial=0170B5DFA81EB7E6759F61E95E4DE8DC7386CADB
+$ openssl ca -config ca.cnf -batch -in server.csr -out server-ca.crt -notext -extfile server.ext -days 30 2>&1 | tail -3
+
+Write out database with 1 new entries
+Database updated
+$ cat crl/index.txt
+V	261213035028Z		01	unknown	/CN=server.example.internal
+$ openssl ca -config ca.cnf -revoke server-ca.crt 2>&1 | tail -1
+Database updated
+$ openssl ca -config ca.cnf -gencrl -out lab.crl 2>&1 | tail -1
+Using configuration from ca.cnf
+$ openssl crl -in lab.crl -noout -text | grep -E 'Serial Number|Revocation Date|Last Update|Next Update'
+        Last Update: Nov 13 03:50:28 2026 GMT
+        Next Update: Nov 20 03:50:28 2026 GMT
+    Serial Number: 01
+        Revocation Date: Nov 13 03:50:28 2026 GMT
+$ openssl verify -CAfile ca.crt -crl_check -CRLfile lab.crl server-ca.crt
+CN = server.example.internal
+error 23 at 0 depth lookup: certificate revoked
+error server-ca.crt: verification failed
+$ cat ca.crt lab.crl > chain-crl.pem; openssl verify -CAfile chain-crl.pem -crl_check server-ca.crt
+CN = server.example.internal
+error 23 at 0 depth lookup: certificate revoked
+error server-ca.crt: verification failed
+$ openssl verify -CAfile chain-crl.pem -crl_check server.crt
+server.crt: OK

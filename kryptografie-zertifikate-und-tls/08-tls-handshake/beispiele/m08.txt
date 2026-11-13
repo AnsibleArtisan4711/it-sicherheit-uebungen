@@ -1,0 +1,163 @@
+# Ausgaben aus der Testumgebung (Ubuntu 24.04, OpenSSL 3.0.13, Namespaces linux01/win11, siehe testlabor16.sh); keine Aufzeichnung von Hyper-V oder Windows. Zeitstempel, Hashwerte, Schlüssel und Seriennummern ändern sich bei jedem Lauf.
+$ ip -br link   (in linux01)
+lo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP> 
+eth0@if7         UP             2e:18:60:6a:d9:1c <BROADCAST,MULTICAST,UP,LOWER_UP> 
+$ openssl s_server -accept 4433 -cert server.crt -key server.key -www   (Terminal 1, läuft im Hintergrund)
+$ ip netns exec win11 curl -vk https://192.168.10.10:4433/ -o /dev/null 2>&1 | grep -E '^\* (SSL|TLS|using|ALPN|Server certificate|  (subject|start|expire|issuer|SSL certificate verify)|SSL connection)|^< HTTP'
+* ALPN: curl offers h2,http/1.1
+* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+* TLSv1.3 (IN), TLS handshake, Server hello (2):
+* TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+* TLSv1.3 (IN), TLS handshake, Certificate (11):
+* TLSv1.3 (IN), TLS handshake, CERT verify (15):
+* TLSv1.3 (IN), TLS handshake, Finished (20):
+* TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.3 (OUT), TLS handshake, Finished (20):
+* SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384 / X25519 / RSASSA-PSS
+* ALPN: server did not agree on a protocol. Uses default.
+* Server certificate:
+* using HTTP/1.x
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+< HTTP/1.0 200 ok
+* TLSv1.3 (IN), TLS alert, close notify (256):
+* TLSv1.3 (OUT), TLS alert, close notify (256):
+$ tshark -r tls13.pcapng -Y 'tls.handshake.type == 2' -V 2>/dev/null | grep -E 'Handshake Type|Version:|Cipher Suite:|Extension: supported_versions|Supported Version|Extension: key_share|Named Group' 
+    0100 .... = Version: 4
+        Version: TLS 1.2 (0x0303)
+            Handshake Type: Server Hello (2)
+            Version: TLS 1.2 (0x0303)
+            Cipher Suite: TLS_AES_256_GCM_SHA384 (0x1302)
+            Extension: supported_versions (len=2) TLS 1.3
+                Supported Version: TLS 1.3 (0x0304)
+            Extension: key_share (len=36) x25519
+        Version: TLS 1.2 (0x0303)
+        Version: TLS 1.2 (0x0303)
+        Version: TLS 1.2 (0x0303)
+        Version: TLS 1.2 (0x0303)
+        Version: TLS 1.2 (0x0303)
+$ tshark -r tls13.pcapng -Y tls.handshake -T fields -e frame.number -e tls.handshake.type -e _ws.col.Info 2>/dev/null
+4	1	Client Hello
+6	2	Server Hello, Change Cipher Spec, Application Data, Application Data, Application Data, Application Data
+$ tshark -r tls13.pcapng -Y 'tls.handshake.type == 11' 2>/dev/null | wc -l
+0
+$ tshark -r tls13.pcapng -T fields -e frame.number -e _ws.col.Protocol -e _ws.col.Info 2>/dev/null
+1	TCP	58920 → 4433 [SYN] Seq=0 Win=64240 Len=0 MSS=1460 SACK_PERM TSval=3464958673 TSecr=0 WS=1024
+2	TCP	4433 → 58920 [SYN, ACK] Seq=0 Ack=1 Win=65160 Len=0 MSS=1460 SACK_PERM TSval=3336571104 TSecr=3464958673 WS=1024
+3	TCP	58920 → 4433 [ACK] Seq=1 Ack=1 Win=64512 Len=0 TSval=3464958673 TSecr=3336571104
+4	TLSv1	Client Hello
+5	TCP	4433 → 58920 [ACK] Seq=1 Ack=518 Win=65536 Len=0 TSval=3336571105 TSecr=3464958674
+6	TLSv1.3	Server Hello, Change Cipher Spec, Application Data, Application Data, Application Data, Application Data
+7	TCP	58920 → 4433 [ACK] Seq=518 Ack=1557 Win=68608 Len=0 TSval=3464958676 TSecr=3336571107
+8	TLSv1.3	Change Cipher Spec, Application Data
+9	TLSv1.3	Application Data
+10	TLSv1.3	Application Data
+11	TLSv1.3	Application Data
+12	TCP	58920 → 4433 [ACK] Seq=701 Ack=2067 Win=73728 Len=0 TSval=3464958677 TSecr=3336571108
+13	TLSv1.3	Application Data
+14	TCP	58920 → 4433 [ACK] Seq=701 Ack=7235 Win=81920 Len=0 TSval=3464958677 TSecr=3336571108
+15	TLSv1.3	Application Data
+16	TLSv1.3	Application Data
+17	TCP	58920 → 4433 [FIN, ACK] Seq=725 Ack=7259 Win=81920 Len=0 TSval=3464958678 TSecr=3336571109
+18	TCP	4433 → 58920 [FIN, ACK] Seq=7259 Ack=726 Win=65536 Len=0 TSval=3336571109 TSecr=3464958678
+19	TCP	58920 → 4433 [ACK] Seq=726 Ack=7260 Win=81920 Len=0 TSval=3464958678 TSecr=3336571109
+$ tshark -r tls13.pcapng -Y 'tls.handshake.type == 1' -T fields -e tls.handshake.extensions_server_name -e tls.handshake.ciphersuite 2>/dev/null | cut -c1-200
+	0x1302,0x1303,0x1301,0xc02c,0xc030,0x009f,0xcca9,0xcca8,0xccaa,0xc02b,0xc02f,0x009e,0xc024,0xc028,0x006b,0xc023,0xc027,0x0067,0xc00a,0xc014,0x0039,0xc009,0xc013,0x0033,0x009d,0x009c,0x003d,0x003c,0x0
+$ openssl s_server ... -www -tls1_2   (neu gestartet)
+$ ip netns exec win11 curl -vk https://192.168.10.10:4433/ -o /dev/null 2>&1 | grep -E '^\* (SSL connection|TLSv)|^< HTTP'
+* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+* TLSv1.3 (IN), TLS handshake, Server hello (2):
+* TLSv1.2 (IN), TLS handshake, Certificate (11):
+* TLSv1.2 (IN), TLS handshake, Server key exchange (12):
+* TLSv1.2 (IN), TLS handshake, Server finished (14):
+* TLSv1.2 (OUT), TLS handshake, Client key exchange (16):
+* TLSv1.2 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (OUT), TLS handshake, Finished (20):
+* TLSv1.2 (IN), TLS handshake, Finished (20):
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES256-GCM-SHA384 / X25519 / RSASSA-PSS
+< HTTP/1.0 200 ok
+* TLSv1.2 (IN), TLS alert, close notify (256):
+* TLSv1.2 (OUT), TLS alert, close notify (256):
+$ tshark -r tls12.pcapng -Y 'tls.handshake.type == 2' -V 2>/dev/null | grep -E 'Version:|Cipher Suite:'
+    0100 .... = Version: 4
+        Version: TLS 1.2 (0x0303)
+            Version: TLS 1.2 (0x0303)
+            Cipher Suite: TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (0xc030)
+        Version: TLS 1.2 (0x0303)
+        Version: TLS 1.2 (0x0303)
+        Version: TLS 1.2 (0x0303)
+$ tshark -r tls12.pcapng -Y tls.handshake -T fields -e frame.number -e tls.handshake.type -e _ws.col.Info 2>/dev/null
+4	1	Client Hello
+6	2,11,12,14	Server Hello, Certificate, Server Key Exchange, Server Hello Done
+8	16	Client Key Exchange, Change Cipher Spec, Encrypted Handshake Message
+9		Change Cipher Spec, Encrypted Handshake Message
+$ tshark -r tls12.pcapng -Y 'tls.handshake.type == 11' -T fields -e tls.handshake.certificate 2>/dev/null | cut -c1-40
+308203e43082024ca00302010202140170b5dfa8
+$ tshark -r tls12.pcapng -Y 'tls.handshake.type == 11' -V 2>/dev/null | grep -E 'commonName|Certificate:|id-at-commonName|dNSName|iPAddress' | head
+                            rdnSequence: 1 item (id-at-commonName=Lab Root CA)
+                                RDNSequence item: 1 item (id-at-commonName=Lab Root CA)
+                                    RelativeDistinguishedName item (id-at-commonName=Lab Root CA)
+                                        Object Id: 2.5.4.3 (id-at-commonName)
+                            rdnSequence: 1 item (id-at-commonName=server.example.internal)
+                                RDNSequence item: 1 item (id-at-commonName=server.example.internal)
+                                    RelativeDistinguishedName item (id-at-commonName=server.example.internal)
+                                        Object Id: 2.5.4.3 (id-at-commonName)
+                                    GeneralName: dNSName (2)
+                                        dNSName: server.example.internal
+$ tshark -r tls12.pcapng -T fields -e frame.number -e _ws.col.Protocol -e _ws.col.Info 2>/dev/null
+1	TCP	48244 → 4433 [SYN] Seq=0 Win=64240 Len=0 MSS=1460 SACK_PERM TSval=659552043 TSecr=0 WS=1024
+2	TCP	4433 → 48244 [SYN, ACK] Seq=0 Ack=1 Win=65160 Len=0 MSS=1460 SACK_PERM TSval=3759826038 TSecr=659552043 WS=1024
+3	TCP	48244 → 4433 [ACK] Seq=1 Ack=1 Win=64512 Len=0 TSval=659552043 TSecr=3759826038
+4	TLSv1	Client Hello
+5	TCP	4433 → 48244 [ACK] Seq=1 Ack=518 Win=65536 Len=0 TSval=3759826039 TSecr=659552044
+6	TLSv1.2	Server Hello, Certificate, Server Key Exchange, Server Hello Done
+7	TCP	48244 → 4433 [ACK] Seq=518 Ack=1428 Win=67584 Len=0 TSval=659552046 TSecr=3759826041
+8	TLSv1.2	Client Key Exchange, Change Cipher Spec, Encrypted Handshake Message
+9	TLSv1.2	Change Cipher Spec, Encrypted Handshake Message
+10	TLSv1.2	Application Data
+11	TLSv1.2	Application Data
+12	TCP	48244 → 4433 [ACK] Seq=721 Ack=6641 Win=78848 Len=0 TSval=659552047 TSecr=3759826042
+13	TLSv1.2	Encrypted Alert
+14	TLSv1.2	Encrypted Alert
+15	TCP	4433 → 48244 [FIN, ACK] Seq=6672 Ack=752 Win=65536 Len=0 TSval=3759826042 TSecr=659552047
+16	TCP	48244 → 4433 [FIN, ACK] Seq=752 Ack=6673 Win=78848 Len=0 TSval=659552047 TSecr=3759826042
+17	TCP	4433 → 48244 [ACK] Seq=6673 Ack=753 Win=65536 Len=0 TSval=3759826042 TSecr=659552047
+---
+$ openssl ciphers -v 'ECDHE-RSA-AES256-GCM-SHA384'
+TLS_AES_256_GCM_SHA384         TLSv1.3 Kx=any      Au=any   Enc=AESGCM(256)            Mac=AEAD
+TLS_CHACHA20_POLY1305_SHA256   TLSv1.3 Kx=any      Au=any   Enc=CHACHA20/POLY1305(256) Mac=AEAD
+TLS_AES_128_GCM_SHA256         TLSv1.3 Kx=any      Au=any   Enc=AESGCM(128)            Mac=AEAD
+ECDHE-RSA-AES256-GCM-SHA384    TLSv1.2 Kx=ECDH     Au=RSA   Enc=AESGCM(256)            Mac=AEAD
+$ openssl ciphers -v -ciphersuites TLS_AES_256_GCM_SHA384 'ECDHE-RSA-AES256-GCM-SHA384'
+TLS_AES_256_GCM_SHA384         TLSv1.3 Kx=any      Au=any   Enc=AESGCM(256)            Mac=AEAD
+ECDHE-RSA-AES256-GCM-SHA384    TLSv1.2 Kx=ECDH     Au=RSA   Enc=AESGCM(256)            Mac=AEAD
+$ openssl ciphers -v TLS_AES_256_GCM_SHA384
+Error in cipher list
+401747DA4A7F0000:error:0A0000B9:SSL routines:SSL_CTX_set_cipher_list:no cipher match:../ssl/ssl_lib.c:2779:
+$ openssl ciphers -v | head -8
+TLS_AES_256_GCM_SHA384         TLSv1.3 Kx=any      Au=any   Enc=AESGCM(256)            Mac=AEAD
+TLS_CHACHA20_POLY1305_SHA256   TLSv1.3 Kx=any      Au=any   Enc=CHACHA20/POLY1305(256) Mac=AEAD
+TLS_AES_128_GCM_SHA256         TLSv1.3 Kx=any      Au=any   Enc=AESGCM(128)            Mac=AEAD
+ECDHE-ECDSA-AES256-GCM-SHA384  TLSv1.2 Kx=ECDH     Au=ECDSA Enc=AESGCM(256)            Mac=AEAD
+ECDHE-RSA-AES256-GCM-SHA384    TLSv1.2 Kx=ECDH     Au=RSA   Enc=AESGCM(256)            Mac=AEAD
+DHE-RSA-AES256-GCM-SHA384      TLSv1.2 Kx=DH       Au=RSA   Enc=AESGCM(256)            Mac=AEAD
+ECDHE-ECDSA-CHACHA20-POLY1305  TLSv1.2 Kx=ECDH     Au=ECDSA Enc=CHACHA20/POLY1305(256) Mac=AEAD
+ECDHE-RSA-CHACHA20-POLY1305    TLSv1.2 Kx=ECDH     Au=RSA   Enc=CHACHA20/POLY1305(256) Mac=AEAD
+$ openssl ciphers -v | wc -l
+60
+$ openssl ciphers -s -tls1_3
+TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256
+$ openssl ciphers -v 'ECDHE-RSA-AES128-GCM-SHA256:AES256-SHA' 
+TLS_AES_256_GCM_SHA384         TLSv1.3 Kx=any      Au=any   Enc=AESGCM(256)            Mac=AEAD
+TLS_CHACHA20_POLY1305_SHA256   TLSv1.3 Kx=any      Au=any   Enc=CHACHA20/POLY1305(256) Mac=AEAD
+TLS_AES_128_GCM_SHA256         TLSv1.3 Kx=any      Au=any   Enc=AESGCM(128)            Mac=AEAD
+ECDHE-RSA-AES128-GCM-SHA256    TLSv1.2 Kx=ECDH     Au=RSA   Enc=AESGCM(128)            Mac=AEAD
+AES256-SHA                     SSLv3   Kx=RSA      Au=RSA   Enc=AES(256)               Mac=SHA1
+$ tshark -G fields 2>/dev/null | grep -c .
+251575
+$ tshark -G fields 2>/dev/null | grep -E '^F.*(tls.handshake.type|tls.handshake.ciphersuite)\s' | cut -c1-120
+F	Handshake Type	dtls.handshake.type	FT_UINT8	dtls	BASE_DEC	0x0	Type of handshake message
+F	Cipher Suite	dtls.handshake.ciphersuite	FT_UINT16	dtls	BASE_HEX	0x0	
+F	Handshake Type	tls.handshake.type	FT_UINT8	tls	BASE_DEC	0x0	Type of handshake message
+F	Cipher Suite	tls.handshake.ciphersuite	FT_UINT16	tls	BASE_HEX	0x0	
+F	Type	wtls.handshake.type	FT_UINT8	wtls	BASE_DEC	0x0	

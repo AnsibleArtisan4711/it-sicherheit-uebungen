@@ -1,0 +1,112 @@
+# Ausgaben aus der Testumgebung (Ubuntu 24.04, OpenSSL 3.0.13, Namespaces linux01/win11, siehe testlabor16.sh); keine Aufzeichnung von Hyper-V oder Windows. Zeitstempel, Hashwerte, Schlüssel und Seriennummern ändern sich bei jedem Lauf.
+# Testplatte: Loop-Gerät /dev/loop0 (64 MiB, Datei disk.img) statt /dev/sdb; Kennwörter über --key-file=- bzw. echo, im Kurs interaktiv
+$ lsblk -d -o NAME,SIZE,TYPE /dev/loop0
+NAME  SIZE TYPE
+loop0  64M loop
+$ echo -n LabKennwort1 | cryptsetup luksFormat --batch-mode /dev/loop0 --key-file=-
+$ blkid /dev/loop0
+/dev/loop0: UUID="e2c2429c-507f-4cea-8e28-58ca9d550d7a" TYPE="crypto_LUKS"
+$ cryptsetup luksDump /dev/loop0 | sed -n '1,30p'
+LUKS header information
+Version:       	2
+Epoch:         	3
+Metadata area: 	16384 [bytes]
+Keyslots area: 	16744448 [bytes]
+UUID:          	e2c2429c-507f-4cea-8e28-58ca9d550d7a
+Label:         	(no label)
+Subsystem:     	(no subsystem)
+Flags:       	(no flags)
+
+Data segments:
+  0: crypt
+	offset: 16777216 [bytes]
+	length: (whole device)
+	cipher: aes-xts-plain64
+	sector: 512 [bytes]
+
+Keyslots:
+  0: luks2
+	Key:        512 bits
+	Priority:   normal
+	Cipher:     aes-xts-plain64
+	Cipher key: 512 bits
+	PBKDF:      argon2id
+	Time cost:  4
+	Memory:     857470
+	Threads:    2
+	Salt:       04 3f a3 89 e0 82 47 47 36 81 4a c5 82 c4 92 f9 
+	            22 dd 70 8c 6d 9f 96 da ea 9c b7 1f 37 4f d5 88 
+	AF stripes: 4000
+$ echo -n LabKennwort1 | cryptsetup open --test-passphrase /dev/loop0 --key-file=-; echo rc=$?
+rc=0
+$ echo -n falsch | cryptsetup open --test-passphrase /dev/loop0 --key-file=-; echo rc=$?
+No key available with this passphrase.
+rc=2
+$ printf 'LabKennwort1' > /tmp/k1; printf 'ZweitesKennwort2' > /tmp/k2; cryptsetup luksAddKey /dev/loop0 /tmp/k2 --key-file=/tmp/k1; echo rc=$?
+rc=0
+$ cryptsetup open --test-passphrase /dev/loop0 --key-file=/tmp/k2; echo rc=$?
+rc=0
+$ cryptsetup luksDump /dev/loop0 | sed -n '/Keyslots:/,/Tokens:/p'
+Keyslots:
+  0: luks2
+	Key:        512 bits
+	Priority:   normal
+	Cipher:     aes-xts-plain64
+	Cipher key: 512 bits
+	PBKDF:      argon2id
+	Time cost:  4
+	Memory:     857470
+	Threads:    2
+	Salt:       04 3f a3 89 e0 82 47 47 36 81 4a c5 82 c4 92 f9 
+	            22 dd 70 8c 6d 9f 96 da ea 9c b7 1f 37 4f d5 88 
+	AF stripes: 4000
+	AF hash:    sha256
+	Area offset:32768 [bytes]
+	Area length:258048 [bytes]
+	Digest ID:  0
+  1: luks2
+	Key:        512 bits
+	Priority:   normal
+	Cipher:     aes-xts-plain64
+	Cipher key: 512 bits
+	PBKDF:      argon2id
+	Time cost:  4
+	Memory:     980381
+	Threads:    2
+	Salt:       52 df 1b be 95 2f b5 c0 ce ed f3 5c b8 61 ff 17 
+	            27 26 b2 df 67 ae e9 e8 06 30 31 83 6a 80 94 06 
+	AF stripes: 4000
+	AF hash:    sha256
+	Area offset:290816 [bytes]
+	Area length:258048 [bytes]
+	Digest ID:  0
+Tokens:
+$ cryptsetup luksHeaderBackup /dev/loop0 --header-backup-file ~/krypto/m10/luks-header.img; ls -l ~/krypto/m10/luks-header.img
+-r-------- 1 root root 16777216 Nov 13 04:49 /root/krypto/m10/luks-header.img
+$ cryptsetup luksDump /dev/loop0 | grep -E 'offset|length' | head -4
+	offset: 16777216 [bytes]
+	length: (whole device)
+	Area offset:32768 [bytes]
+	Area length:258048 [bytes]
+$ dd if=/dev/zero of=/dev/loop0 bs=1M count=16 status=none; blkid /dev/loop0; echo rc=$?
+rc=2
+$ cryptsetup open --test-passphrase /dev/loop0 --key-file=/tmp/k1; echo rc=$?
+Device /dev/loop0 is not a valid LUKS device.
+rc=1
+$ cryptsetup luksHeaderRestore /dev/loop0 --header-backup-file ~/krypto/m10/luks-header.img -q; echo rc=$?
+rc=0
+$ cryptsetup open --test-passphrase /dev/loop0 --key-file=/tmp/k1; echo rc=$?
+rc=0
+$ cryptsetup open --test-passphrase /dev/loop0 --key-file=/tmp/k2; echo rc=$?
+rc=0
+$ cryptsetup luksKillSlot /dev/loop0 1 --key-file=/tmp/k1 -q; echo rc=$?
+rc=0
+$ cryptsetup open --test-passphrase /dev/loop0 --key-file=/tmp/k2; echo rc=$?
+No key available with this passphrase.
+rc=2
+$ cryptsetup open --test-passphrase /dev/loop0 --key-file=/tmp/k1; echo rc=$?  # Header-Backup enthält den entfernten Slot noch:
+rc=0
+$ cryptsetup luksHeaderRestore /dev/loop0 --header-backup-file ~/krypto/m10/luks-header.img -q; cryptsetup open --test-passphrase /dev/loop0 --key-file=/tmp/k2; echo rc=$?
+rc=0
+$ dd if=/dev/zero of=/dev/loop0 bs=1M count=1 status=none; cryptsetup luksDump /dev/loop0 2>&1 | head -2
+Device /dev/loop0 is not a valid LUKS device.

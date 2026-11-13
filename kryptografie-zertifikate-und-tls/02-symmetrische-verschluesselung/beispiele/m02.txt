@@ -1,0 +1,40 @@
+# Ausgaben aus der Testumgebung (Ubuntu 24.04, OpenSSL 3.0.13, Namespaces linux01/win11, siehe testlabor16.sh); keine Aufzeichnung von Hyper-V oder Windows. Zeitstempel, Hashwerte, Schlüssel und Seriennummern ändern sich bei jedem Lauf.
+$ openssl enc -aes-256-cbc -salt -pbkdf2 -in geheim.txt -out geheim.enc -pass pass:LabKennwort1
+$ ls -l geheim.txt geheim.enc
+-rw-r--r-- 1 root root 48 Nov 13 04:38 geheim.enc
+-rw-r--r-- 1 root root 31 Nov 13 04:38 geheim.txt
+$ head -c 8 geheim.enc; echo
+Salted__
+$ openssl enc -d -aes-256-cbc -pbkdf2 -in geheim.enc -out geheim.txt -pass pass:LabKennwort1
+$ cat geheim.txt
+vertraulicher Inhalt der Datei
+# ohne -pbkdf2
+$ openssl enc -aes-256-cbc -salt -in geheim.txt -out alt.enc -pass pass:LabKennwort1
+*** WARNING : deprecated key derivation used.
+Using -iter or -pbkdf2 would be better.
+$ openssl enc -d -aes-256-cbc -pbkdf2 -in geheim.enc -out x.txt -pass pass:falsch
+bad decrypt
+402785B6CF7F0000:error:1C800064:Provider routines:ossl_cipher_unpadblock:bad decrypt:../providers/implementations/ciphers/ciphercommon_block.c:124:
+$ ls -l muster.txt
+-rw-r--r-- 1 root root 1600 Nov 13 04:38 muster.txt
+$ openssl enc -aes-256-ecb -pbkdf2 -in muster.txt -out muster.ecb -pass pass:LabKennwort1
+$ openssl enc -aes-256-cbc -pbkdf2 -in muster.txt -out muster.cbc -pass pass:LabKennwort1
+$ ls -l muster.ecb muster.cbc
+-rw-r--r-- 1 root root 1632 Nov 13 04:38 muster.cbc
+-rw-r--r-- 1 root root 1632 Nov 13 04:38 muster.ecb
+$ tail -c +17 muster.ecb | od -An -tx1 -w16 -v | sort | uniq -c | sort -rn | head -3
+    100  d3 09 59 f1 fd 93 9c 6e e9 c9 30 6f 2b 32 3d 41
+      1  1c 51 81 f7 b5 c7 7f ef 46 ad 65 9f c3 86 58 d4
+$ tail -c +17 muster.cbc | od -An -tx1 -w16 -v | sort | uniq -c | sort -rn | head -3
+      1  f7 6c 29 95 75 16 38 09 9b 2f d9 c4 99 6e 69 5c
+      1  f3 e8 d4 12 2b 7e 50 d7 36 4e 7e cc 33 22 30 d9
+      1  f2 87 f3 f7 23 37 ac 4c 18 bd b5 30 bb 13 ae 1e
+$ openssl enc -aes-256-gcm -pbkdf2 -in muster.txt -out muster.gcm -pass pass:LabKennwort1; echo $?
+enc: AEAD ciphers not supported
+enc: Use -help for summary.
+1
+$ openssl enc -aes-256-cbc -pbkdf2 -in geheim.txt -out g2.enc -pass pass:LabKennwort1
+$ cmp geheim.enc g2.enc | head -1
+geheim.enc g2.enc differ: char 9, line 1
+$ openssl enc -chacha20 -pbkdf2 -in geheim.txt -out g.cc -pass pass:LabKennwort1; ls -l g.cc
+-rw-r--r-- 1 root root 47 Nov 13 04:38 g.cc

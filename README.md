@@ -7,6 +7,7 @@ Praxisübungen zur IT-Sicherheit mit Windows und Linux im isolierten Labor. Jede
 | Ordner | Thema | Stand |
 |---|---|---|
 | [`it-sicherheitsgrundlagen/`](it-sicherheitsgrundlagen/) | IT-Sicherheitsgrundlagen (P12): 12 Module, 87 Stunden | Entwurf, Linux-Teile in einer Testumgebung ausgeführt, Windows nicht |
+| [`kryptografie-zertifikate-und-tls/`](kryptografie-zertifikate-und-tls/) | Kryptografie, Zertifikate und TLS (P16): 12 Module, 82,5 Stunden | Entwurf, OpenSSL-, TLS- und LUKS-Verwaltungsbefehle in einer Testumgebung ausgeführt, Windows nicht |
 
 ## Lizenz
 

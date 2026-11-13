@@ -1,0 +1,94 @@
+# Ausgaben aus der Testumgebung (Ubuntu 24.04, OpenSSL 3.0.13, Namespaces linux01/win11, siehe testlabor16.sh); keine Aufzeichnung von Hyper-V oder Windows. Zeitstempel, Hashwerte, Schlüssel und Seriennummern ändern sich bei jedem Lauf.
+$ ls -l /etc/shadow
+-rw-r----- 1 root shadow 1521 Nov 13 04:17 /etc/shadow
+$ grep -E '^(root|nobody):' /etc/shadow | cut -c1-60
+root:*:20750:0:99999:7:::
+nobody:*:20750:0:99999:7:::
+$ cut -d: -f1,2 /etc/shadow | awk -F: '{print $1": "substr($2,1,4)}' | head -5
+root: *
+daemon: *
+bin: *
+sys: *
+sync: *
+$ openssl passwd -6 'Kurs2026!'
+$6$eh46sOl0zXhcVj4C$M8VsCvVW8oSyxgDdKnmk4PdVuMlJlDZ5V5AWuysYi/il3kmKWHwsDdmXp2lwpMJHucFcsDUsMX89lH/qbz5M7/
+$ openssl passwd -6 'Kurs2026!'
+$6$4f/N5u3V5exV6sKb$Lv0ZQPjN1Xhm4EYG7o/OQty.O7smwW1FeUEW6HsiXucPncPcfbYJnS0b0TI4TeI4gEFn3BdID1ybgP589qI1B0
+$ openssl passwd -6 -salt abcdefgh 'Kurs2026!'
+$6$abcdefgh$UZry4OPjKNtX1CfxW3Bp62m9sz9bxIpUoekRIRMohrH7QJ.9LOZZSs39tj/KxYwIC8HL9krlegF8HMV6QX3RS0
+$ openssl passwd -6 -salt abcdefgh 'Kurs2026!'
+$6$abcdefgh$UZry4OPjKNtX1CfxW3Bp62m9sz9bxIpUoekRIRMohrH7QJ.9LOZZSs39tj/KxYwIC8HL9krlegF8HMV6QX3RS0
+$ openssl passwd -5 -salt abcdefgh 'Kurs2026!'
+$5$abcdefgh$tAgvwpNjQBGPjuhNglp/lehQd7rqVx62ppgygTPEBx8
+$ openssl passwd -1 -salt abcdefgh 'Kurs2026!'
+$1$abcdefgh$7jOpAH95eLNwyDqK1YIUR.
+$ time openssl kdf -keylen 32 -kdfopt digest:SHA256 -kdfopt 'pass:Kurs2026!' -kdfopt salt:abcdefgh -kdfopt iter:1000 PBKDF2
+17:6F:3B:96:8A:EF:61:E7:D0:02:83:E7:49:9C:37:45:8F:90:26:6B:9A:DF:38:CE:6F:FB:38:6B:41:9B:22:73
+
+
+real	0m0.004s
+user	0m0.000s
+sys	0m0.003s
+$ time openssl kdf -keylen 32 -kdfopt digest:SHA256 -kdfopt 'pass:Kurs2026!' -kdfopt salt:abcdefgh -kdfopt iter:5000000 PBKDF2
+A8:C8:71:8A:76:43:84:D3:B3:DD:E5:68:CD:29:01:E5:59:84:D4:15:51:D4:D7:07:4B:96:6C:0E:64:BA:61:AE
+
+
+real	0m1.265s
+user	0m1.250s
+sys	0m0.004s
+$ echo -n 'Kurs2026!' | sha256sum
+3b2ee5870c16d15848a4dcf6b9e6c50bf0d9479914c01409797eb8e4094b7927  -
+$ python3 -c "import crypt" 2>&1 | tail -1
+ModuleNotFoundError: No module named 'crypt'
+$ openssl kdf -keylen 32 -kdfopt 'pass:Kurs2026!' -kdfopt salt:abcdefgh -kdfopt iter:1000 -kdfopt digest:SHA256 -binary PBKDF2 | od -An -tx1 | head -2
+ 17 6f 3b 96 8a ef 61 e7 d0 02 83 e7 49 9c 37 45
+ 8f 90 26 6b 9a df 38 ce 6f fb 38 6b 41 9b 22 73
+$ openssl list -kdf-algorithms | head -20
+Provided KDFs and PDFs:
+  HKDF @ default
+  TLS13-KDF @ default
+  SSKDF @ default
+  { 1.2.840.113549.1.5.12, PBKDF2 } @ default
+  PKCS12KDF @ default
+  SSHKDF @ default
+  { X942KDF-CONCAT, X963KDF } @ default
+  TLS1-PRF @ default
+  KBKDF @ default
+  { X942KDF, X942KDF-ASN1 } @ default
+  { 1.3.6.1.4.1.11591.4.11, id-scrypt, SCRYPT } @ default
+  KRB5KDF @ default
+
+# Testkonto 'labuser' (nur Testumgebung), Kennwort 'Kurs2026!' (Laborwert)
+$ useradd -m labuser && echo 'labuser:Kurs2026!' | chpasswd
+$ grep -E '^ENCRYPT_METHOD|^YESCRYPT_COST' /etc/login.defs
+ENCRYPT_METHOD SHA512
+$ grep '^labuser:' /etc/shadow
+labuser:$y$j9T$8BG57oJ707rcGlxSJadmK1$crc62/YApKOsrDX3Fl42b0reY4MxuuWq9mmnGjspSM/:20770:0:99999:7:::
+$ grep '^labuser:' /etc/shadow | cut -d: -f1-3 | cut -c1-120
+labuser:$y$j9T$8BG57oJ707rcGlxSJadmK1$crc62/YApKOsrDX3Fl42b0reY4MxuuWq9mmnGjspSM/:20770
+$ echo 'labuser:Kurs2026!' | chpasswd -c SHA512
+$ grep '^labuser:' /etc/shadow
+labuser:$6$mafJIKog8ww37xqh$MC9HU68EOSrkjupFYZeiN5UCX7N6KrAUnv0ZenJmA4kRCV7SHGBb5vH51uWZMkW6fM6DXAkzHYFjovrL5qtG4/:20770:0:99999:7:::
+$ S=$(grep '^labuser:' /etc/shadow | cut -d: -f2 | cut -d\$ -f3); echo Salt=$S; openssl passwd -6 -salt $S 'Kurs2026!'
+Salt=mafJIKog8ww37xqh
+$6$mafJIKog8ww37xqh$MC9HU68EOSrkjupFYZeiN5UCX7N6KrAUnv0ZenJmA4kRCV7SHGBb5vH51uWZMkW6fM6DXAkzHYFjovrL5qtG4/
+$ grep '^labuser:' /etc/shadow | cut -d: -f2
+$6$mafJIKog8ww37xqh$MC9HU68EOSrkjupFYZeiN5UCX7N6KrAUnv0ZenJmA4kRCV7SHGBb5vH51uWZMkW6fM6DXAkzHYFjovrL5qtG4/
+$ S=$(grep '^labuser:' /etc/shadow | cut -d: -f2 | cut -d\$ -f3); openssl passwd -6 -salt $S 'falsch'
+$6$mafJIKog8ww37xqh$nuelzjMNAUplqIOBNPf.bd0uMBU37iRL1nUkAZR8jy918AfWUHIgWv5wJe9VwAFqYx1xdrqVP9AFOZkXDrgFv.
+$ userdel -r labuser; grep -c '^labuser:' /etc/shadow
+userdel: labuser mail spool (/var/mail/labuser) not found
+0
+
+$ printf '%s\n' passwort 123456 'Kurs2026!' sommer2026 > liste.txt
+$ while read -r w; do printf '%s  %s\n' "$(printf '%s' "$w" | sha256sum | cut -d' ' -f1)" "$w"; done < liste.txt > tabelle.txt; cut -c1-20,65- tabelle.txt
+33c5ebbb01d608c254b3  passwort
+8d969eef6ecad3c29a3a  123456
+3b2ee5870c16d15848a4  Kurs2026!
+99ca9d959b395b4cee37  sommer2026
+$ printf '%s' 'Kurs2026!' | sha256sum | cut -d' ' -f1 | grep -F -f - tabelle.txt | cut -c65-
+  Kurs2026!
+$ openssl passwd -6 -salt abcdefgh 'Kurs2026!' | cut -d\$ -f4 | cut -c1-20
+UZry4OPjKNtX1CfxW3Bp
+$ grep -c "$(openssl passwd -6 -salt abcdefgh 'Kurs2026!' | cut -d\$ -f4)" tabelle.txt
+0

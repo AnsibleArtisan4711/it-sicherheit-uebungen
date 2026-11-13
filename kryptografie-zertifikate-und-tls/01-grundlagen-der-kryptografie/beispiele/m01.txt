@@ -1,0 +1,7 @@
+# Ausgaben aus der Testumgebung (Ubuntu 24.04, OpenSSL 3.0.13, Namespaces linux01/win11, siehe testlabor16.sh); keine Aufzeichnung von Hyper-V oder Windows. Zeitstempel, Hashwerte, Schlüssel und Seriennummern ändern sich bei jedem Lauf.
+$ echo KHOOR | tr 'D-ZA-C' 'A-Z'
+HELLO
+$ echo HELLO | tr 'A-Z' 'D-ZA-C'
+KHOOR
+$ echo HELLO | tr 'A-Z' 'N-ZA-M'
+URYYB

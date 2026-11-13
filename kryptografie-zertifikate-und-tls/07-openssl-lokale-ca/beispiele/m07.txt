@@ -1,0 +1,108 @@
+# Ausgaben aus der Testumgebung (Ubuntu 24.04, OpenSSL 3.0.13, Namespaces linux01/win11, siehe testlabor16.sh); keine Aufzeichnung von Hyper-V oder Windows. Zeitstempel, Hashwerte, Schlüssel und Seriennummern ändern sich bei jedem Lauf.
+$ openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 -out ca.key 2>/dev/null
+$ openssl req -x509 -new -key ca.key -sha256 -days 3650 -subj "/CN=Lab Root CA" -addext "basicConstraints=critical,CA:TRUE" -addext "keyUsage=critical,keyCertSign,cRLSign" -out ca.crt
+$ openssl x509 -in ca.crt -noout -subject -issuer -dates
+subject=CN = Lab Root CA
+issuer=CN = Lab Root CA
+notBefore=Nov 13 03:38:45 2026 GMT
+notAfter=Nov 10 03:38:45 2036 GMT
+$ openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out server.key 2>/dev/null
+$ openssl req -new -key server.key -subj "/CN=server.example.internal" -addext "subjectAltName=DNS:server.example.internal,IP:192.168.10.10" -out server.csr
+$ openssl req -in server.csr -noout -text | sed -n '1,40p' | grep -v '^ *[0-9a-f][0-9a-f]:'
+Certificate Request:
+    Data:
+        Version: 1 (0x0)
+        Subject: CN = server.example.internal
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                Exponent: 65537 (0x10001)
+        Attributes:
+            Requested Extensions:
+                X509v3 Subject Alternative Name: 
+                    DNS:server.example.internal, IP Address:192.168.10.10
+    Signature Algorithm: sha256WithRSAEncryption
+    Signature Value:
+$ openssl req -in server.csr -noout -verify
+Certificate request self-signature verify OK
+$ cat server.ext
+subjectAltName=DNS:server.example.internal,IP:192.168.10.10
+basicConstraints=CA:FALSE
+keyUsage=critical,digitalSignature,keyEncipherment
+extendedKeyUsage=serverAuth
+$ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -days 365 -sha256 -extfile server.ext -out server.crt
+Certificate request self-signature ok
+subject=CN = server.example.internal
+$ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -days 365 -sha256 -out nosan.crt
+Certificate request self-signature ok
+subject=CN = server.example.internal
+$ openssl x509 -in nosan.crt -noout -ext subjectAltName
+No extensions in certificate
+$ openssl x509 -in server.crt -noout -ext subjectAltName
+X509v3 Subject Alternative Name: 
+    DNS:server.example.internal, IP Address:192.168.10.10
+$ openssl verify -CAfile ca.crt server.crt
+server.crt: OK
+$ openssl verify -CAfile ca.crt nosan.crt
+nosan.crt: OK
+$ openssl x509 -in server.crt -noout -text | grep -v '^ *[0-9a-f][0-9a-f]:' | sed -n '1,45p'
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: CN = Lab Root CA
+        Validity
+            Not Before: Nov 13 03:38:45 2026 GMT
+            Not After : Nov 13 03:38:45 2027 GMT
+        Subject: CN = server.example.internal
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Subject Alternative Name: 
+                DNS:server.example.internal, IP Address:192.168.10.10
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            X509v3 Key Usage: critical
+                Digital Signature, Key Encipherment
+            X509v3 Extended Key Usage: 
+                TLS Web Server Authentication
+            X509v3 Subject Key Identifier: 
+                AB:3D:98:21:25:21:0C:38:A5:1E:C4:C4:AC:A4:24:D7:B3:E0:15:54
+            X509v3 Authority Key Identifier: 
+                6E:39:5A:35:82:DD:D7:D0:15:48:E7:30:B4:7D:D8:F6:00:EA:5F:3F
+    Signature Algorithm: sha256WithRSAEncryption
+    Signature Value:
+$ ls
+ca.crt
+ca.key
+ca.srl
+nosan.crt
+server.crt
+server.csr
+server.ext
+server.key
+$ openssl x509 -in server.crt -noout -issuer -subject -dates
+issuer=CN = Lab Root CA
+subject=CN = server.example.internal
+notBefore=Nov 13 03:38:45 2026 GMT
+notAfter=Nov 13 03:38:45 2027 GMT
+$ openssl x509 -in nosan.crt -noout -ext basicConstraints
+No extensions in certificate
+$ openssl x509 -in ca.crt -noout -ext subjectKeyIdentifier,basicConstraints,keyUsage
+X509v3 Subject Key Identifier: 
+    6E:39:5A:35:82:DD:D7:D0:15:48:E7:30:B4:7D:D8:F6:00:EA:5F:3F
+X509v3 Basic Constraints: critical
+    CA:TRUE
+X509v3 Key Usage: critical
+    Certificate Sign, CRL Sign
+$ openssl verify -CAfile ca.crt -verify_hostname server.example.internal server.crt
+server.crt: OK
+$ openssl verify -CAfile ca.crt -verify_hostname falsch.example.internal server.crt
+CN = server.example.internal
+error 62 at 0 depth lookup: hostname mismatch
+error server.crt: verification failed

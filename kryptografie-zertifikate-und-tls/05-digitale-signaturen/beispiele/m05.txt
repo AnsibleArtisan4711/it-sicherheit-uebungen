@@ -1,0 +1,30 @@
+# Ausgaben aus der Testumgebung (Ubuntu 24.04, OpenSSL 3.0.13, Namespaces linux01/win11, siehe testlabor16.sh); keine Aufzeichnung von Hyper-V oder Windows. Zeitstempel, Hashwerte, Schlüssel und Seriennummern ändern sich bei jedem Lauf.
+$ openssl dgst -sha256 -sign ../m03/private.pem -out vertrag.sig vertrag.txt
+$ ls -l vertrag.sig
+-rw-r--r-- 1 root root 384 Nov 13 04:38 vertrag.sig
+$ openssl dgst -sha256 -verify ../m03/public.pem -signature vertrag.sig vertrag.txt
+Verified OK
+$ echo 'Zusatz' >> vertrag.txt
+$ openssl dgst -sha256 -verify ../m03/public.pem -signature vertrag.sig vertrag.txt; echo rc=$?
+40870CCC7B7F0000:error:02000068:rsa routines:ossl_rsa_verify:bad signature:../crypto/rsa/rsa_sign.c:430:
+40870CCC7B7F0000:error:1C880004:Provider routines:rsa_verify:RSA lib:../providers/implementations/signature/rsa_sig.c:774:
+Verification failure
+rc=1
+$ openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 -out partner.pem 2>/dev/null
+$ openssl pkey -in partner.pem -pubout -out partner-public.pem
+$ openssl dgst -sha256 -sign partner.pem -out angebot.sig angebot.txt
+$ openssl dgst -sha256 -verify partner-public.pem -signature angebot.sig angebot.txt
+Verified OK
+$ openssl dgst -sha256 -verify ../m03/public.pem -signature angebot.sig angebot.txt; echo rc=$?
+4017B7E50E7F0000:error:0200008A:rsa routines:RSA_padding_check_PKCS1_type_1:invalid padding:../crypto/rsa/rsa_pk1.c:79:
+4017B7E50E7F0000:error:02000072:rsa routines:rsa_ossl_public_decrypt:padding check failed:../crypto/rsa/rsa_ossl.c:697:
+4017B7E50E7F0000:error:1C880004:Provider routines:rsa_verify:RSA lib:../providers/implementations/signature/rsa_sig.c:774:
+Verification failure
+rc=1
+$ openssl dgst -sha256 -sign ../m03/private.pem -out vertrag2.sig vertrag.txt; openssl dgst -sha256 -sign ../m03/private.pem -out vertrag3.sig vertrag.txt; cmp vertrag2.sig vertrag3.sig && echo gleich
+gleich
+$ openssl dgst -sha256 -verify ../m03/public.pem -signature vertrag.sig angebot.txt; echo rc=$?
+40D775BACD7F0000:error:02000068:rsa routines:ossl_rsa_verify:bad signature:../crypto/rsa/rsa_sign.c:430:
+40D775BACD7F0000:error:1C880004:Provider routines:rsa_verify:RSA lib:../providers/implementations/signature/rsa_sig.c:774:
+Verification failure
+rc=1

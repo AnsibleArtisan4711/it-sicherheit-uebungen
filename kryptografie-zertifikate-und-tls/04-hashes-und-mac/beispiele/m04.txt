@@ -1,0 +1,32 @@
+# Ausgaben aus der Testumgebung (Ubuntu 24.04, OpenSSL 3.0.13, Namespaces linux01/win11, siehe testlabor16.sh); keine Aufzeichnung von Hyper-V oder Windows. Zeitstempel, Hashwerte, Schlüssel und Seriennummern ändern sich bei jedem Lauf.
+$ sha256sum app.conf > app.conf.sha256; cat app.conf.sha256
+732322f37243042be9e5af21441ccfeed748f1cc2dacce6a9cc8cf31b4207083  app.conf
+$ sha256sum -c app.conf.sha256
+app.conf: OK
+$ sed -i 's/8080/8081/' app.conf; cat app.conf
+port=8081
+$ sha256sum -c app.conf.sha256; echo rc=$?
+app.conf: FAILED
+sha256sum: WARNING: 1 computed checksum did NOT match
+rc=1
+$ sha256sum app.conf
+1881b5b156046293f7b500dc790cb1b0f24751dbc5442bfe711fbb20d66b5146  app.conf
+$ openssl dgst -sha256 app.conf
+SHA2-256(app.conf)= 1881b5b156046293f7b500dc790cb1b0f24751dbc5442bfe711fbb20d66b5146
+$ openssl dgst -sha256 -hmac 'geheimes-passwort' app.conf
+HMAC-SHA2-256(app.conf)= 726220b53adc19e3d89fcd6269c60379e9e419bdae42bbfe707eb8b83e3e1104
+$ openssl dgst -sha256 -hmac 'geheimes-passwort' app.conf
+HMAC-SHA2-256(app.conf)= 726220b53adc19e3d89fcd6269c60379e9e419bdae42bbfe707eb8b83e3e1104
+$ openssl dgst -sha256 -hmac 'falsches-passwort' app.conf
+HMAC-SHA2-256(app.conf)= 226ef6885d9b762d63c4a8574e655aed939e9d6b085a0a59085e6e7d2b2b5834
+$ sed -i 's/8081/8082/' app.conf; openssl dgst -sha256 -hmac 'geheimes-passwort' app.conf
+HMAC-SHA2-256(app.conf)= 68e0436586497f9ade50efa3c9aa3851b598fbb604a47c629c4bdcb37363c533
+$ echo 'port=8080' | sha256sum; echo 'port=8081' | sha256sum
+732322f37243042be9e5af21441ccfeed748f1cc2dacce6a9cc8cf31b4207083  -
+1881b5b156046293f7b500dc790cb1b0f24751dbc5442bfe711fbb20d66b5146  -
+$ echo -n abc | md5sum; echo -n abc | sha1sum; echo -n abc | sha256sum; echo -n abc | openssl dgst -sha3-256; echo -n abc | openssl dgst -sha512
+900150983cd24fb0d6963f7d28e17f72  -
+a9993e364706816aba3e25717850c26c9cd0d89d  -
+ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad  -
+SHA3-256(stdin)= 3a985da74fe225b2045c172d6bd390bd855f086e3e9d525b46bfe24511431532
+SHA2-512(stdin)= ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f

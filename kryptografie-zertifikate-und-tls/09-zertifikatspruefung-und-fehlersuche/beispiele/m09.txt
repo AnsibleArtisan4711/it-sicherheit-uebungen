@@ -1,0 +1,155 @@
+# Ausgaben aus der Testumgebung (Ubuntu 24.04, OpenSSL 3.0.13, Namespaces linux01/win11, siehe testlabor16.sh); keine Aufzeichnung von Hyper-V oder Windows. Zeitstempel, Hashwerte, Schlüssel und Seriennummern ändern sich bei jedem Lauf.
+$ ip netns exec linux01 sh -c 'echo | openssl s_client -connect 192.168.10.10:4433' | grep -E '^(depth|verify|Verification|Verify|---|Certificate chain| [0-9] s:|   i:|New,|Server certificate|SSL handshake|Protocol|Cipher)' 
+Can't use SSL_get_servername
+depth=0 CN = server.example.internal
+verify error:num=20:unable to get local issuer certificate
+verify return:1
+depth=0 CN = server.example.internal
+verify error:num=21:unable to verify the first certificate
+verify return:1
+depth=0 CN = server.example.internal
+verify return:1
+DONE
+---
+Certificate chain
+ 0 s:CN = server.example.internal
+   i:CN = Lab Root CA
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+-----END CERTIFICATE-----
+---
+---
+SSL handshake has read 1556 bytes and written 373 bytes
+Verification error: unable to verify the first certificate
+---
+New, TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384
+Verify return code: 21 (unable to verify the first certificate)
+---
+$ ip netns exec linux01 sh -c 'echo | openssl s_client -connect 192.168.10.10:4433 -CAfile ~/krypto/m07/ca.crt' | grep -E 'Verif|^depth|verify error'
+Can't use SSL_get_servername
+depth=1 CN = Lab Root CA
+verify return:1
+depth=0 CN = server.example.internal
+verify return:1
+DONE
+Verification: OK
+Verify return code: 0 (ok)
+$ ip netns exec linux01 sh -c 'echo | openssl s_client -connect 192.168.10.10:4433 -CAfile ~/krypto/m07/ca.crt -showcerts' | grep -E '^( [0-9] s:|   i:|-----BEGIN|-----END|Certificate chain)'
+Can't use SSL_get_servername
+depth=1 CN = Lab Root CA
+verify return:1
+depth=0 CN = server.example.internal
+verify return:1
+DONE
+Certificate chain
+ 0 s:CN = server.example.internal
+   i:CN = Lab Root CA
+-----BEGIN CERTIFICATE-----
+-----END CERTIFICATE-----
+$ ip netns exec linux01 sh -c 'echo | openssl s_client -connect 192.168.10.10:4433 -CAfile ~/krypto/m07/ca.crt -verify_hostname server.example.internal' | grep -E 'Verif'
+Can't use SSL_get_servername
+depth=1 CN = Lab Root CA
+verify return:1
+depth=0 CN = server.example.internal
+verify return:1
+DONE
+Verification: OK
+Verified peername: server.example.internal
+Verify return code: 0 (ok)
+$ ip netns exec linux01 sh -c 'echo | openssl s_client -connect 192.168.10.10:4433 -CAfile ~/krypto/m07/ca.crt -verify_hostname falsch.example.internal' | grep -E 'Verif|verify error'
+Can't use SSL_get_servername
+depth=0 CN = server.example.internal
+verify error:num=62:hostname mismatch
+verify return:1
+depth=1 CN = Lab Root CA
+verify return:1
+depth=0 CN = server.example.internal
+verify return:1
+DONE
+Verification error: hostname mismatch
+Verify return code: 62 (hostname mismatch)
+$ ip netns exec linux01 sh -c 'echo | openssl s_client -connect 192.168.10.10:4433 -CAfile ~/krypto/m07/ca.crt -verify_ip 192.168.10.10' | grep -E 'Verif'
+Can't use SSL_get_servername
+depth=1 CN = Lab Root CA
+verify return:1
+depth=0 CN = server.example.internal
+verify return:1
+DONE
+Verification: OK
+Verify return code: 0 (ok)
+$ ip netns exec linux01 sh -c 'echo | openssl s_client -connect 192.168.10.10:4433 -CAfile ~/krypto/m07/ca.crt -verify_ip 192.168.10.99' | grep -E 'Verif|verify error'
+Can't use SSL_get_servername
+depth=0 CN = server.example.internal
+verify error:num=64:IP address mismatch
+verify return:1
+depth=1 CN = Lab Root CA
+verify return:1
+depth=0 CN = server.example.internal
+verify return:1
+DONE
+Verification error: IP address mismatch
+Verify return code: 64 (IP address mismatch)
+$ openssl verify -CAfile ca.crt -attime $(date -d '+2 years' +%s) server.crt
+CN = server.example.internal
+error 10 at 0 depth lookup: certificate has expired
+error server.crt: verification failed
+$ openssl verify -CAfile ca.crt -attime $(date -d '-2 days' +%s) server.crt
+CN = Lab Root CA
+error 9 at 1 depth lookup: certificate is not yet valid
+error server.crt: verification failed
+$ openssl verify server.crt
+CN = server.example.internal
+error 20 at 0 depth lookup: unable to get local issuer certificate
+error server.crt: verification failed
+$ openssl verify -CAfile ca.crt server.crt
+server.crt: OK
+$ openssl verify -CAfile ca.crt ca.crt
+ca.crt: OK
+$ openssl verify -CAfile ca.crt nosan.crt
+nosan.crt: OK
+$ openssl x509 -in server.crt -noout -subject -issuer; openssl x509 -in server.crt -noout -ext subjectAltName
+subject=CN = server.example.internal
+issuer=CN = Lab Root CA
+X509v3 Subject Alternative Name: 
+    DNS:server.example.internal, IP Address:192.168.10.10
+$ openssl verify -CAfile ca.crt /tmp/gen16/ss.crt
+CN = ss
+error 18 at 0 depth lookup: self-signed certificate
+error /tmp/gen16/ss.crt: verification failed
+$ cd /root/krypto/m09; ip netns exec win11 sha256sum /root/krypto/m07/ca.crt; sha256sum /root/krypto/m07/ca.crt
+a2f84859d493be14749ad28d5b161efb28e29631ce7896f447f223190642dcb4  /root/krypto/m07/ca.crt
+a2f84859d493be14749ad28d5b161efb28e29631ce7896f447f223190642dcb4  /root/krypto/m07/ca.crt
+$ ip netns exec win11 curl -sS https://192.168.10.10:4433/ -o /dev/null; echo rc=$?
+curl: (60) SSL certificate problem: unable to get local issuer certificate
+More details here: https://curl.se/docs/sslcerts.html
+
+curl failed to verify the legitimacy of the server and therefore could not
+establish a secure connection to it. To learn more about this situation and
+how to fix it, please visit the web page mentioned above.
+rc=60
+$ ip netns exec win11 curl -sS --cacert /root/krypto/m07/ca.crt https://192.168.10.10:4433/ -o /dev/null; echo rc=$?
+rc=0
+$ ip netns exec win11 curl -sS --cacert /root/krypto/m07/ca.crt --resolve server.example.internal:4433:192.168.10.10 https://server.example.internal:4433/ -o /dev/null; echo rc=$?
+curl: (7) Failed to connect to 127.0.0.1 port 42509 after 0 ms: Couldn't connect to server
+rc=7
+$ ip netns exec win11 curl -sS --cacert /root/krypto/m07/ca.crt --resolve falsch.example.internal:4433:192.168.10.10 https://falsch.example.internal:4433/ -o /dev/null; echo rc=$?
+curl: (7) Failed to connect to 127.0.0.1 port 42509 after 0 ms: Couldn't connect to server
+rc=7
+$ ip netns exec win11 curl -sS -k https://192.168.10.10:4433/ -o /dev/null; echo rc=$?
+rc=0
+
+$ ip netns exec win11 curl -sS --noproxy '*' --cacert /root/krypto/m07/ca.crt --resolve server.example.internal:4433:192.168.10.10 https://server.example.internal:4433/ -o /dev/null; echo rc=$?
+rc=0
+$ ip netns exec win11 curl -sS --noproxy '*' --cacert /root/krypto/m07/ca.crt --resolve falsch.example.internal:4433:192.168.10.10 https://falsch.example.internal:4433/ -o /dev/null; echo rc=$?
+curl: (60) SSL: no alternative certificate subject name matches target host name 'falsch.example.internal'
+More details here: https://curl.se/docs/sslcerts.html
+
+curl failed to verify the legitimacy of the server and therefore could not
+establish a secure connection to it. To learn more about this situation and
+how to fix it, please visit the web page mentioned above.
+rc=60
+$ ip netns exec win11 curl -sS --noproxy '*' https://192.168.10.10:4433/ -o /dev/null 2>&1 | head -2; echo
+curl: (60) SSL certificate problem: unable to get local issuer certificate
+More details here: https://curl.se/docs/sslcerts.html
+
