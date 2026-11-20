@@ -1,0 +1,30 @@
+
+## 1. Ohne Firewall: alles erreichbar
+Quelle 10.14.0.2 -> Port 22: erlaubt
+Quelle 10.14.0.2 -> Port 8080: erlaubt
+Quelle 10.14.0.2 -> Port 3306: erlaubt
+Quelle 10.14.0.3 -> Port 22: erlaubt
+
+## 2. Regelwerk laden und prüfen (nft -c, dann Laden)
+$ nft -c -f ./server_firewall.nft
+Rückgabewert Syntaxprüfung: 0
+geladen
+
+## 3. Mit Firewall
+Quelle 10.14.0.2 -> Port 22: erlaubt
+Quelle 10.14.0.3 -> Port 22: GESPERRT
+Quelle 10.14.0.2 -> Port 8080: erlaubt
+Quelle 10.14.0.3 -> Port 8080: erlaubt
+Quelle 10.14.0.2 -> Port 3306: GESPERRT
+
+Ping (zehn Pakete, schnell):
+10 packets transmitted, 10 received, 0% packet loss, time 504ms
+
+## 4. Zähler: wie viele Pakete wurden verworfen? (letzte Regel mit counter)
+		counter packets 2 bytes 120 …drop
+
+## 5. Rate-Limit für SSH: acht schnelle Verbindungsversuche von der Verwaltungsadresse
+erfolgreich: 5 von 8 (Grenze: 6 pro Minute, burst 6; vorherige Tests zählen mit)
+
+## 6. Sicherheitsnetz: Rückfall ohne Aussperren (Hinweis)
+In der VM vor dem Laden: 'at now + 3 minutes' mit 'nft flush ruleset' vorbereiten und danach mit 'atrm' entfernen.

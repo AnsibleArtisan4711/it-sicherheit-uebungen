@@ -1,0 +1,6 @@
+rechner;gruppe;letzter_patch;neustart_ausstehend
+srv-dc01;dc;2026-11-12;nein
+srv-file01;server;2026-09-30;nein
+srv-app01;server;2026-11-10;ja
+srv-old01;server;2026-04-02;nein
+ws-user07;client;2026-11-05;nein

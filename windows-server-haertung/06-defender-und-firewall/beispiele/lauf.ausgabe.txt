@@ -1,0 +1,8 @@
+Dateifreigabe SMB    Inbound  Allow  TCP    445    10.14.0.0/24   ok
+RDP Verwaltung       Inbound  Allow  TCP    3389   Any            Verwaltungs-/Dateidienst für alle Adressen offen: auf Verwaltungsnetz begrenzen; gilt in allen Profilen (auch Öffentlich)
+WinRM HTTP           Inbound  Allow  TCP    5985   10.14.0.10     ok
+Test alles erlaubt   Inbound  Allow  Any    Any    Any            KRITISCH: erlaubt alles von überall; gilt in allen Profilen (auch Öffentlich)
+Ping                 Inbound  Allow  ICMPv4 Any    10.14.0.0/24   ok
+Alter FTP-Zugang     Inbound  Allow  TCP    21     Any            deaktiviert: löschen, wenn nicht mehr gebraucht
+
+Regeln mit Handlungsbedarf: 3

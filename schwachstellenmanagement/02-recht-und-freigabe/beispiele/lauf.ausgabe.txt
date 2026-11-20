@@ -1,0 +1,8 @@
+Stichtag: 2026-11-20
+10.15.0.11      ERLAUBT   freigegeben durch A-2026-014
+10.15.0.2       ERLAUBT   freigegeben durch A-2026-014
+10.15.0.1       ABGELEHNT ausdrücklich ausgeschlossen (A-2026-014)
+10.15.0.200     ERLAUBT   freigegeben durch A-2026-014
+192.168.178.1   ABGELEHNT keine Freigabe für diesen Bereich
+8.8.8.8         ABGELEHNT öffentliche Adresse: nie ohne ausdrückliche Erlaubnis des Eigentümers
+10.0.0.5        ABGELEHNT keine Freigabe für diesen Bereich

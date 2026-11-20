@@ -1,0 +1,11 @@
+zeit;ereignis;konto;quelle;details
+2026-11-02 09:00:01;4625;adm-tom;10.14.0.50;Kennwort falsch
+2026-11-02 09:00:03;4625;adm-tom;10.14.0.50;Kennwort falsch
+2026-11-02 09:00:05;4625;adm-tom;10.14.0.50;Kennwort falsch
+2026-11-02 09:00:07;4625;adm-tom;10.14.0.50;Kennwort falsch
+2026-11-02 09:00:09;4625;adm-tom;10.14.0.50;Kennwort falsch
+2026-11-02 09:00:11;4624;adm-tom;10.14.0.50;Anmeldetyp 3
+2026-11-02 09:05:00;4720;backdoor1;10.14.0.50;Konto erstellt von adm-tom
+2026-11-02 09:06:00;4732;backdoor1;10.14.0.50;Mitglied von Administratoren
+2026-11-02 09:20:00;1102;adm-tom;srv-file01;Überwachungsprotokoll gelöscht
+2026-11-02 10:00:00;4624;anna;10.14.0.21;Anmeldetyp 2

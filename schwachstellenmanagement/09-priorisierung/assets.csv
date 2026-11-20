@@ -1,0 +1,5 @@
+host;name;kritikalitaet;exposition
+10.15.0.11;ziel01 (Linux, Intranet-Server);3;intern
+10.15.0.12;ziel02 (Windows, Dateiserver);4;intern
+10.15.0.20;web01 (Webshop);5;dmz
+10.15.0.30;test01 (Testsystem);1;intern

@@ -1,0 +1,6 @@
+srv-file01  WinRM nur HTTP
+srv-app01   RDP ohne NLA; SMB-Signierung nicht verlangt; NTLM-Stufe 3 (Ziel 5); WinRM nur HTTP
+srv-old01   RDP ohne NLA; SMB1 aktiv; SMB-Signierung nicht verlangt; NTLM-Stufe 1 (Ziel 5); WinRM nur HTTP
+srv-dc01    ok
+
+Rechner mit Abweichungen: 3 von 4

@@ -1,0 +1,39 @@
+
+## 1. Werkzeug
+Nmap version 7.94SVN ( https://nmap.org )
+
+## 2. Host-Erkennung im Netz (nmap -sn 10.15.0.0/24)
+Nmap scan report for 10.15.0.11
+Host is up.
+Nmap scan report for 10.15.0.2
+Host is up.
+Nmap done: 256 IP addresses (2 hosts up) scanned
+
+## 3. Alle TCP-Ports des Ziels (SYN-Scan, -p-): offene Ports
+22/tcp   open  ssh
+80/tcp   open  http
+443/tcp  open  https
+2323/tcp open  3d-nfsd
+8080/tcp open  http-proxy
+
+## 4. Dienst- und Versionserkennung der offenen Ports (-sV)
+22/tcp open ssh OpenSSH 9.6p1 Ubuntu 3ubuntu13.20 (Ubuntu Linux; protocol 2.0)
+80/tcp open http nginx 1.24.0 (Ubuntu)
+443/tcp open ssl/http nginx 1.24.0 (Ubuntu)
+2323/tcp open 3d-nfsd?
+8080/tcp open http SimpleHTTPServer 0.6 (Python 3.13.18)
+
+## 5. Bestandsliste aus der XML-Ausgabe (nmap_nach_csv.py)
+# Hosts
+ip;zustand;name
+10.15.0.11;up;
+# Offene Ports
+ip;port;protokoll;dienst;produkt_version
+10.15.0.11;22;tcp;ssh;OpenSSH 9.6p1 Ubuntu 3ubuntu13.20
+10.15.0.11;80;tcp;http;nginx 1.24.0
+10.15.0.11;443;tcp;http;nginx 1.24.0
+10.15.0.11;2323;tcp;3d-nfsd;
+10.15.0.11;8080;tcp;http;SimpleHTTPServer 0.6
+
+## 6. Bestimmte Adressen vom Scan ausnehmen (--exclude), z. B. den Scanner selbst
+gefundene Hosts ohne Scanner: 1

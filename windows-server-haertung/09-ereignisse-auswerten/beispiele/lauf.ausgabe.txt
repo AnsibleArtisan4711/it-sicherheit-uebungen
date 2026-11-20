@@ -1,0 +1,6 @@
+Regel 1: Fehlanmeldungen (Schwelle 5) und späterer Erfolg
+  adm-tom von 10.14.0.50: 5 Fehlversuche, danach ERFOLGREICH angemeldet (Verdacht auf Kennwortraten)
+Regel 2: neues Konto und Aufnahme in eine Administratorgruppe
+  2026-11-02 09:06:00: Mitglied von Administratoren -> Verdacht auf Hintertür
+Regel 3: Überwachungsprotokoll gelöscht
+  2026-11-02 09:20:00 auf srv-file01 durch adm-tom

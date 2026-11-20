@@ -1,0 +1,7 @@
+paket;behoben_in;hinweis_id;schweregrad;beschreibung
+openssl;3.0.99-0ubuntu99;BSP-2026-0001;hoch;Frei erfundener Hinweis: Fehler in der Zertifikatsprüfung
+openssh-server;1:9.6p1-3ubuntu13.99;BSP-2026-0002;mittel;Frei erfundener Hinweis: Umgehung einer Anmeldebeschränkung
+sudo;1.9.0-1;BSP-2026-0003;hoch;Frei erfundener Hinweis: Rechteausweitung (behoben in einer Version, die älter ist als die installierte)
+nginx;1.24.0-2ubuntu99;BSP-2026-0004;mittel;Frei erfundener Hinweis: Absturz bei fehlerhafter Anfrage
+bash;5.2.21-2ubuntu99;BSP-2026-0005;niedrig;Frei erfundener Hinweis: Fehler bei der Verarbeitung von Umgebungsvariablen
+nicht-installiertes-paket;1.0-1;BSP-2026-0006;hoch;Frei erfundener Hinweis: Paket ist nicht installiert

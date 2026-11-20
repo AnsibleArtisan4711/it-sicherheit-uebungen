@@ -1,0 +1,45 @@
+
+## 1. TLS (ssl-enum-ciphers): angebotene Protokolle und Güte
+|   TLSv1.0:
+|     warnings:
+|       Anonymous key exchange, score capped at F
+|   TLSv1.1:
+|     warnings:
+|       Anonymous key exchange, score capped at F
+|   TLSv1.2:
+|     warnings:
+|       Anonymous key exchange, score capped at F
+|_  least strength: F
+
+## 2. SSH (ssh-auth-methods): erlaubte Anmeldearten
+| ssh-auth-methods: 
+|   Supported authentication methods: 
+|     publickey
+|     password
+|_    keyboard-interactive
+
+## 3. HTTP (http-title, http-headers) auf 80, 8080 und 443
+80/tcp   open  http
+|   Server: nginx/1.24.0 (Ubuntu)
+|   Content-Type: text/html
+|_http-title: Site doesn't have a title (text/html).
+443/tcp  open  https
+|_http-title: Site doesn't have a title (text/html).
+|   Server: nginx/1.24.0 (Ubuntu)
+|   Content-Type: text/html
+8080/tcp open  http-proxy
+|   Server: SimpleHTTP/0.6 Python/3.13.18
+|_http-title: Directory listing for /
+
+## 4. Banner (banner) des unbekannten Dienstes auf Port 2323
+2323/tcp open  3d-nfsd
+|_banner: Willkommen auf ziel01 (Test-Telnet)\x0D\x0Alogin:
+
+## 5. Auswertung nach Regeln (nmap_befunde.py) – XML mit allen Skripten
+id;host;port;regel;titel;schwere;cvss_vektor
+F-001;10.15.0.11;22;R3;SSH erlaubt Anmeldung mit Passwort;mittel;CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N
+F-002;10.15.0.11;443;R1;Veraltetes TLS-Protokoll (TLS 1.0 oder 1.1) angeboten;mittel;CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N
+F-003;10.15.0.11;443;R2;TLS mit anonymem Schlüsselaustausch angeboten (kein Schutz vor Mitlesen und Fälschung);hoch;CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N
+F-004;10.15.0.11;443;R6;HTTPS ohne Strict-Transport-Security (HSTS);niedrig;CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:L/A:N
+F-005;10.15.0.11;2323;R5;Dienst mit Klartext-Anmeldung (Telnet-ähnliche Kennung login:);hoch;CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H
+F-006;10.15.0.11;8080;R4;Webserver zeigt Dateiliste eines Verzeichnisses;mittel;CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N

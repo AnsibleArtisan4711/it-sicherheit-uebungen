@@ -1,0 +1,8 @@
+Administrator  lokal     Administrator mit nie ablaufendem Kennwort
+Gast           lokal     ok
+adm-tom        domaene   ok
+svc-sql        dienst    Dienstkonto mit Administratorrechten (gMSA und geringere Rechte prüfen)
+anna           domaene   ok
+ehemalig-max   domaene   seit 345 Tagen nicht angemeldet, Konto noch aktiv; Remote-Anmelderecht bei ungenutztem Konto
+
+Auffällige Konten: 3 (Stichtag 2026-11-20)

@@ -1,0 +1,41 @@
+
+## 1. Freigabe prüfen (02/scan_freigabe.py)
+10.15.0.11      ERLAUBT   freigegeben durch A-2026-014
+10.15.0.1       ABGELEHNT ausdrücklich ausgeschlossen (A-2026-014)
+
+## 2. Scan und Befunde (Ausgangslage)
+id | port | titel | schwere
+F-001 | 22 | SSH erlaubt Anmeldung mit Passwort | mittel
+F-002 | 443 | Veraltetes TLS-Protokoll (TLS 1.0 oder 1.1) angeboten | mittel
+F-003 | 443 | TLS mit anonymem Schlüsselaustausch angeboten (kein Schutz vor Mitlesen und Fälschung) | hoch
+F-004 | 443 | HTTPS ohne Strict-Transport-Security (HSTS) | niedrig
+F-005 | 2323 | Dienst mit Klartext-Anmeldung (Telnet-ähnliche Kennung login:) | hoch
+F-006 | 8080 | Webserver zeigt Dateiliste eines Verzeichnisses | mittel
+
+## 3. Bewertung und Priorisierung (Kritikalität 3, intern; EPSS und KEV hier nur angenommen)
+Rang  ID    Host         Titel                                CVSS  Krit Expos.   EPSS  KEV  Prio  Frist (Tage)
+1     F-005 10.15.0.11   Dienst mit Klartext-Anmeldung (Telne 8.1   3    intern   0.05  nein P3    90  (Risiko 5.8)
+2     F-003 10.15.0.11   TLS mit anonymem Schlüsselaustausch  7.4   3    intern   0.05  nein P3    90  (Risiko 5.3)
+3     F-001 10.15.0.11   SSH erlaubt Anmeldung mit Passwort   7.4   3    intern   0.05  nein P3    90  (Risiko 5.3)
+4     F-006 10.15.0.11   Webserver zeigt Dateiliste eines Ver 5.3   3    intern   0.05  nein P4    180  (Risiko 3.8)
+5     F-002 10.15.0.11   Veraltetes TLS-Protokoll (TLS 1.0 od 4.8   3    intern   0.05  nein P4    180  (Risiko 3.5)
+6     F-004 10.15.0.11   HTTPS ohne Strict-Transport-Security 4.2   3    intern   0.05  nein P4    180  (Risiko 3.0)
+
+## 4. Behebung (Ziel im gehärteten Zustand neu starten) und Nachscan
+
+## 5. Vergleich
+BEHOBEN (nur im ersten Scan): 6
+  10.15.0.11:22  SSH erlaubt Anmeldung mit Passwort  [mittel]
+  10.15.0.11:2323  Dienst mit Klartext-Anmeldung (Telnet-ähnliche Kennung login:)  [hoch]
+  10.15.0.11:443  Veraltetes TLS-Protokoll (TLS 1.0 oder 1.1) angeboten  [mittel]
+  10.15.0.11:443  TLS mit anonymem Schlüsselaustausch angeboten (kein Schutz vor Mitlesen und Fälschung)  [hoch]
+  10.15.0.11:443  HTTPS ohne Strict-Transport-Security (HSTS)  [niedrig]
+  10.15.0.11:8080  Webserver zeigt Dateiliste eines Verzeichnisses  [mittel]
+NEU (nur im zweiten Scan): 0
+UNVERÄNDERT OFFEN: 0
+
+Ergebnis: 6 von 6 Befunden behoben, 0 neu, 0 offen
+Rückgabewert: 0
+
+## 6. Kennzahl dieser Runde
+Befunde vorher: 6, nachher: 0, Behebungsquote: 100 %

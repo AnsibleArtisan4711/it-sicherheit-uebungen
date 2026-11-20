@@ -1,0 +1,12 @@
+Einstellung                                                            Op   Soll   Ist    Ergebnis
+MinimumPasswordLength                                                  >=   14     8      ABWEICHUNG
+PasswordComplexity                                                     =    1      1      ok
+MaximumPasswordAge                                                     <=   365    90     ok
+LockoutBadCount                                                        >=   1      0      ABWEICHUNG
+EnableGuestAccount                                                     =    0      0      ok
+LmCompatibilityLevel                                                   =    5      3      ABWEICHUNG
+RequireSecuritySignature                                               =    1      0      ABWEICHUNG
+RestrictAnonymous                                                      =    1      0      ABWEICHUNG
+AuditLogonEvents                                                       =    3      -      FEHLT
+
+ok: 3, Abweichungen: 5, nicht in der Vorlage: 1

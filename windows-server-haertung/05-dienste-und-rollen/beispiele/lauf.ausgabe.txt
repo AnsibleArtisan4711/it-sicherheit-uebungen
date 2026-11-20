@@ -1,0 +1,9 @@
+Spooler         Running   Automatic    ABSCHALTEN: Druckdienst auf Dateiserver nicht nötig (Angriffsfläche)
+W32Time         Running   Manual       ok: Zeitsynchronisation
+RemoteRegistry  Running   Automatic    ABSCHALTEN: Fernzugriff auf die Registrierung nicht nötig
+WinRM           Running   Automatic    ok: Verwaltung (nur aus dem Verwaltungsnetz)
+TermService     Running   Automatic    ok: Verwaltung per RDP mit Netzwerkebenen-Authentifizierung
+FTPSVC          Running   Automatic    ABSCHALTEN: Klartextprotokoll
+SNMP            Running   Automatic    ABSCHALTEN: Nicht verwendet
+
+Handlungsbedarf: 4 von 7 Diensten

@@ -1,0 +1,8 @@
+name;anzeigename;startart;status;konto
+Spooler;Druckwarteschlange;Automatic;Running;LocalSystem
+W32Time;Windows-Zeit;Manual;Running;LocalService
+RemoteRegistry;Remoteregistrierung;Automatic;Running;LocalService
+WinRM;Windows-Remoteverwaltung;Automatic;Running;NetworkService
+TermService;Remotedesktopdienste;Automatic;Running;NetworkService
+FTPSVC;FTP-Dienst;Automatic;Running;LocalSystem
+SNMP;SNMP-Dienst;Automatic;Running;LocalSystem

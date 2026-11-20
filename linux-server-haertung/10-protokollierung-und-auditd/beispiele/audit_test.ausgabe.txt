@@ -1,0 +1,45 @@
+
+## 1. Zustand von auditd (auditctl -s, Auszug)
+enabled 1
+failure 1
+backlog_limit 8192
+lost 0
+
+## 2. Regeln laden (auditctl -R audit.rules) und anzeigen (auditctl -l)
+Rückgabewert auditctl -R: 0
+$ auditctl -l
+-w /etc/p14-watch.conf -p wa -k p14_konfig
+-w /etc/sudoers.d -p wa -k p14_sudo
+-w /usr/bin/chage -p x -k p14_privileg
+-a always,exit -F arch=b64 -S mount -F key=p14_mount
+
+## 3. Ereignisse auslösen
+
+## 4. Ereignisse nach Schlüsselwort (aureport -k --summary)
+Key Summary Report
+===========================
+total  key
+===========================
+4  p14_konfig
+3  p14_sudo
+2  p14_privileg
+2  p14_mount
+
+## 5. Dateiereignisse lesen: aureport -f -i (Datum und Uhrzeit weggelassen)
+      1 /etc/p14-watch.conf          fchmodat  yes   /usr/bin/chmod    
+      1 /etc/p14-watch.conf          openat    yes   /usr/bin/bash     
+      1 /etc/sudoers.d/p14-audit     fchmodat  yes   /usr/bin/chmod    
+
+$ ausearch -k p14_konfig -x /usr/bin/chmod -i  (Auszug: SYSCALL-Zeile)
+type=SYSCALL  syscall=fchmodat success=yes exit=0 uid=root comm=chmod exe=/usr/bin/chmod key=p14_konfig 
+
+## 6. Wer hat chage ausgeführt? (ausearch -k p14_privileg -x /usr/bin/chage)
+      1 syscall=execve uid=root comm=chage exe=/usr/bin/chage
+(auid=unset im Testlabor: kein echter Anmeldevorgang; in der VM steht hier das Konto, mit dem man sich angemeldet hat)
+
+## 7. Umgang mit dem Datenvolumen: Größe des Protokolls und Rotation
+audit.log: 15275 Bytes
+max_log_file = 8
+num_logs = 5
+max_log_file_action = ROTATE
+space_left_action = SYSLOG

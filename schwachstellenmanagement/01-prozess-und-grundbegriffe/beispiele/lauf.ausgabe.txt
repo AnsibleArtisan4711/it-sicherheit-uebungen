@@ -1,0 +1,17 @@
+B-001 bewertet       ok: jetzt bewertet
+B-001 zugewiesen     ok: jetzt zugewiesen
+B-001 geschlossen    ABGELEHNT: zugewiesen -> geschlossen (erlaubt: ausnahme, behoben)
+B-001 behoben        ok: jetzt behoben
+B-001 geprueft       ok: jetzt geprueft
+B-001 geschlossen    ok: jetzt geschlossen
+B-002 bewertet       ok: jetzt bewertet
+B-002 falsch-positiv ok: jetzt falsch-positiv
+B-002 geschlossen    ok: jetzt geschlossen
+B-003 behoben        ABGELEHNT: neu -> behoben (erlaubt: bewertet)
+B-003 bewertet       ok: jetzt bewertet
+B-003 ausnahme       ok: jetzt ausnahme
+B-003 zugewiesen     ok: jetzt zugewiesen
+
+B-001 | geschlossen    | TLS 1.0 aktiv auf 10.15.0.11:443
+B-002 | geschlossen    | Dateiliste auf Port 8080
+B-003 | zugewiesen     | Telnet-ähnlicher Dienst auf Port 2323

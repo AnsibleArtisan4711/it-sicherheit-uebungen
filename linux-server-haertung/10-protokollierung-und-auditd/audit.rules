@@ -1,0 +1,11 @@
+# audit.rules – Beispielregeln für den Kurs (Ausschnitt, nicht vollständig)
+-D
+-b 8192
+-f 1
+## Änderungen an Konfigurationsdateien überwachen (w = schreiben, a = Attribute ändern)
+-w /etc/p14-watch.conf -p wa -k p14_konfig
+-w /etc/sudoers.d/ -p wa -k p14_sudo
+## Ausführung eines privilegierten Programms überwachen (x = ausführen)
+-w /usr/bin/chage -p x -k p14_privileg
+## Einhängen von Dateisystemen protokollieren (Systemaufruf mount)
+-a always,exit -F arch=b64 -S mount -k p14_mount

@@ -1,0 +1,15 @@
+## 1. Paketprüfung mit der erfundenen Hinweisliste
+Installierte Pakete im System: 1299
+Hinweis        Paket                      Schwere   Ergebnis    installierte Version / behoben in
+BSP-2026-0001  openssl                    hoch      verwundbar  3.0.13-0ubuntu3.16 < 3.0.99-0ubuntu99
+BSP-2026-0002  openssh-server             mittel    verwundbar  1:9.6p1-3ubuntu13.20 < 1:9.6p1-3ubuntu13.99
+BSP-2026-0003  sudo                       hoch      behoben     1.9.15p5-3ubuntu5.24.04.4 >= 1.9.0-1
+BSP-2026-0004  nginx                      mittel    verwundbar  1.24.0-2ubuntu7.19 < 1.24.0-2ubuntu99
+BSP-2026-0005  bash                       niedrig   verwundbar  5.2.21-2ubuntu4 < 5.2.21-2ubuntu99
+BSP-2026-0006  nicht-installiertes-paket  hoch      nicht installiert -
+
+Zusammenfassung: 4 verwundbar, 1 behoben, 1 nicht installiert
+
+## 2. Ausstehende Aktualisierungen laut apt (Simulation, keine Installation)
+Pakete mit verfügbarer Aktualisierung: 49
+(die Namen hängen vom Testsystem ab und werden nicht gezeigt)

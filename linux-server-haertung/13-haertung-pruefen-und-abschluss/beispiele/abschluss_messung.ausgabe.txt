@@ -1,0 +1,44 @@
+
+## 1. Vorher: Prüfkatalog
+ 1 FEHLER  SSH: Root-Anmeldung verboten
+ 2 FEHLER  SSH: Passwortanmeldung aus
+ 3 FEHLER  SSH: höchstens 4 Versuche (MaxAuthTries)
+ 4 ok      Nur root hat UID 0
+ 5 ok      Kein Konto mit leerem Passwort
+ 6 ok      /etc/shadow nicht weltlesbar
+ 7 ok      sudoers-Dateien syntaktisch in Ordnung
+ 8 FEHLER  Maximales Passwortalter höchstens 90 Tage
+ 9 FEHLER  Standard-umask mindestens 027
+10 FEHLER  Anmeldebanner gesetzt (/etc/issue.net)
+
+Ergebnis: 4 von 10 Prüfungen bestanden, 6 Fehler
+
+## 2. Vorher: Lynis
+Lynis-Härtungsindex: 66   Warnungen: 4   Vorschläge: 43
+
+## 3. Maßnahmen anwenden
+angewendet; Sicherung in /tmp/p14-sicherung
+
+## 4. Nachher: Prüfkatalog
+ 1 ok      SSH: Root-Anmeldung verboten
+ 2 ok      SSH: Passwortanmeldung aus
+ 3 ok      SSH: höchstens 4 Versuche (MaxAuthTries)
+ 4 ok      Nur root hat UID 0
+ 5 ok      Kein Konto mit leerem Passwort
+ 6 ok      /etc/shadow nicht weltlesbar
+ 7 ok      sudoers-Dateien syntaktisch in Ordnung
+ 8 ok      Maximales Passwortalter höchstens 90 Tage
+ 9 ok      Standard-umask mindestens 027
+10 ok      Anmeldebanner gesetzt (/etc/issue.net)
+
+Ergebnis: 10 von 10 Prüfungen bestanden, 0 Fehler
+
+## 5. Nachher: Lynis
+Lynis-Härtungsindex: 70   Warnungen: 4   Vorschläge: 36
+
+## 6. Welche Lynis-Vorschläge sind verschwunden? (Testnummern)
+AUTH-9230 AUTH-9286 AUTH-9328 KRNL-5820 STRG-1846 USB-1000 
+
+## 7. Zurücksetzen und erneut prüfen
+zurückgesetzt
+Ergebnis: 4 von 10 Prüfungen bestanden, 6 Fehler

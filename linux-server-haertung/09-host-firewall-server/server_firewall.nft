@@ -1,0 +1,21 @@
+#!/usr/sbin/nft -f
+# Host-Firewall für den Server: alles verbieten, was nicht erlaubt ist (inet = IPv4 und IPv6).
+# Verwaltungsnetz (SSH): nur 10.14.0.2. Dienst: HTTP auf Port 8080 für alle. Ping begrenzt.
+flush ruleset
+table inet haertung {
+  set verwaltung { type ipv4_addr; elements = { 10.14.0.2 } }
+
+  chain eingang {
+    type filter hook input priority 0; policy drop;
+    iif lo accept
+    ct state established,related accept
+    ct state invalid drop
+    ip protocol icmp icmp type echo-request limit rate 5/second burst 10 packets accept
+    ip saddr @verwaltung tcp dport 22 ct state new limit rate 6/minute burst 6 packets accept
+    tcp dport 8080 accept
+    counter log prefix "p14-drop " level info drop
+  }
+  chain ausgang {
+    type filter hook output priority 0; policy accept;
+  }
+}

@@ -1,0 +1,17 @@
+Rang  ID    Host         Titel                                CVSS  Krit Expos.   EPSS  KEV  Prio  Frist (Tage)
+1     V-03  10.15.0.20   SQL-Einschleusung in Suchformular    9.1   5    dmz      0.45  nein P1    7  (Risiko 10.0)
+2     V-02  10.15.0.12   Veraltete SMB-Version aktiv          9.8   4    intern   0.90  ja   P1    7  (Risiko 10.0)
+3     V-06  10.15.0.12   Lokale Rechteausweitung              7.8   4    intern   0.05  nein P3    90  (Risiko 6.2)
+4     V-07  10.15.0.20   Server-Version im Header sichtbar    5.3   5    dmz      0.01  nein P3    90  (Risiko 5.8)
+5     V-04  10.15.0.30   SQL-Einschleusung in Suchformular    9.1   1    intern   0.45  nein P3    90  (Risiko 5.1)
+6     V-05  10.15.0.11   Dateiliste sichtbar                  5.3   3    intern   0.02  nein P4    180  (Risiko 3.8)
+7     V-01  10.15.0.11   TLS 1.0 angeboten                    4.8   3    intern   0.01  nein P4    180  (Risiko 3.5)
+
+Vergleich: reine Sortierung nach CVSS-Basiswert
+1     V-02  Veraltete SMB-Version aktiv          CVSS 9.8
+2     V-03  SQL-Einschleusung in Suchformular    CVSS 9.1
+3     V-04  SQL-Einschleusung in Suchformular    CVSS 9.1
+4     V-06  Lokale Rechteausweitung              CVSS 7.8
+5     V-05  Dateiliste sichtbar                  CVSS 5.3
+6     V-07  Server-Version im Header sichtbar    CVSS 5.3
+7     V-01  TLS 1.0 angeboten                    CVSS 4.8

@@ -1,0 +1,7 @@
+subcategory;soll;ereignisse
+Logon;Success and Failure;4624, 4625
+Account Lockout;Failure;4625
+User Account Management;Success and Failure;4720, 4722, 4724, 4725, 4726, 4738, 4740
+Process Creation;Success;4688
+Audit Policy Change;Success and Failure;4719
+Security Group Management;Success and Failure;4728, 4732

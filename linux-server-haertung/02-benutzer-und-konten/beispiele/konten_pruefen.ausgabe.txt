@@ -1,0 +1,43 @@
+## Testkonten anlegen
+useradd warning: t14root2's uid 0 outside of the UID_MIN 1000 and UID_MAX 60000 range.
+
+## 1. Konten mit UID 0 (erwartet: nur root)
+root
+t14root2
+
+## 2. Konten mit leerem Passwortfeld (erwartet: keines)
+t14bernd
+
+## 3. Konten mit Anmelde-Shell, UID 0 oder ab 1000 (Passwortstatus aus /etc/shadow)
+root      uid=0      shell=/bin/bash  pw=gesetzt
+t14anna   uid=30033  shell=/bin/bash  pw=gesetzt
+t14bernd  uid=30034  shell=/bin/bash  pw=LEER
+t14root2  uid=0      shell=/bin/bash  pw=gesperrt
+
+## 4. Passwort-Ablauf für t14anna setzen und anzeigen (chage)
+   Last password change					: Nov 20, 2026
+   Password expires					: Feb 18, 2027
+   Password inactive					: never
+   Account expires						: never
+   Minimum number of days between password change		: 1
+   Maximum number of days between password change		: 90
+   Number of days of warning before password expires	: 14
+
+## 5. Konto sperren (usermod -L) und Shell sperren (usermod -s)
+t14bernd: Passwortfeld beginnt mit "!" (Sperre)
+t14bernd:/usr/sbin/nologin
+t14anna P 2026-11-20 1 90 14 -1
+t14bernd L 2026-11-20 0 99999 7 -1
+
+## 6. Vorgaben in /etc/login.defs (Auszug der echten Datei)
+UMASK		022
+PASS_MAX_DAYS	99999
+PASS_MIN_DAYS	0
+PASS_WARN_AGE	7
+ENCRYPT_METHOD SHA512
+
+## 7. Hash-Verfahren von t14anna (Kennung im Passwortfeld)
+Kennung $y$  (6 = SHA-512, y = yescrypt)
+
+## 8. Aufräumen: Konten entfernen und prüfen
+alle Testkonten entfernt

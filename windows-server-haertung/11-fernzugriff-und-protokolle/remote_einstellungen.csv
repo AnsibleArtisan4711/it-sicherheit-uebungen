@@ -1,0 +1,5 @@
+rechner;rdp_aktiv;rdp_nla;smb1;smb_signierung;ntlm_stufe;winrm_http;winrm_https
+srv-file01;ja;ja;nein;ja;5;ja;nein
+srv-app01;ja;nein;nein;nein;3;ja;nein
+srv-old01;ja;nein;ja;nein;1;ja;nein
+srv-dc01;nein;ja;nein;ja;5;ja;ja

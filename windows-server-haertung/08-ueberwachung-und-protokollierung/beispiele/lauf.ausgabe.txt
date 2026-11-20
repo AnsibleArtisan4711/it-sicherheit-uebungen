@@ -1,0 +1,8 @@
+Logon                      Soll: Success and Failure  Ist: Success              LÜCKE (Ereignisse 4624, 4625 fehlen)
+Account Lockout            Soll: Failure              Ist: No Auditing          LÜCKE (Ereignisse 4625 fehlen)
+User Account Management    Soll: Success and Failure  Ist: Success and Failure  ok
+Process Creation           Soll: Success              Ist: No Auditing          LÜCKE (Ereignisse 4688 fehlen)
+Audit Policy Change        Soll: Success and Failure  Ist: Success              LÜCKE (Ereignisse 4719 fehlen)
+Security Group Management  Soll: Success and Failure  Ist: No Auditing          LÜCKE (Ereignisse 4728, 4732 fehlen)
+
+Lücken: 5

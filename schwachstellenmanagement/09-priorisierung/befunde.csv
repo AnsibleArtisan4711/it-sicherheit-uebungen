@@ -1,0 +1,8 @@
+id;host;titel;cvss_vektor;epss;kev
+V-01;10.15.0.11;TLS 1.0 angeboten;CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N;0.01;nein
+V-02;10.15.0.12;Veraltete SMB-Version aktiv;CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H;0.90;ja
+V-03;10.15.0.20;SQL-Einschleusung in Suchformular;CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N;0.45;nein
+V-04;10.15.0.30;SQL-Einschleusung in Suchformular;CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N;0.45;nein
+V-05;10.15.0.11;Dateiliste sichtbar;CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N;0.02;nein
+V-06;10.15.0.12;Lokale Rechteausweitung;CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H;0.05;nein
+V-07;10.15.0.20;Server-Version im Header sichtbar;CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N;0.01;nein

@@ -1,0 +1,18 @@
+Funde insgesamt: 11
+
+Je Schweregrad:
+  kritisch  1
+  hoch      3
+  mittel    4
+  niedrig   3
+
+Je Host (Zahl, höchster CVSS-Wert):
+  10.15.0.11   7 Funde, höchster Wert 8.1
+  10.15.0.12   4 Funde, höchster Wert 9.8
+
+Unsichere Funde (Erkennungsqualität QoD unter 70 oder nur Versionsabgleich) – vor der Behebung verifizieren:
+  N-007 10.15.0.11:22 Veraltete OpenSSH-Version (nur Versionsabgleich) (QoD 30, aktive Prüfung: nein)
+  N-011 10.15.0.12:445 Veraltete SMB-Version aktiv (QoD 50, aktive Prüfung: nein)
+
+Auffälligkeiten (Plausibilität):
+  N-010 hat CVSS 0.0, aber Schweregrad niedrig: Informationsfund oder Fehler in der Bewertung

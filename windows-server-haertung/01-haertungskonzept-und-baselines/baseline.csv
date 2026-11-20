@@ -1,0 +1,10 @@
+bereich;einstellung;vergleich;soll;begruendung
+System Access;MinimumPasswordLength;>=;14;Längere Kennwörter erschweren Raten
+System Access;PasswordComplexity;=;1;Komplexität einschalten
+System Access;MaximumPasswordAge;<=;365;Eigene Annahme für die Übung
+System Access;LockoutBadCount;>=;1;Sperre nach Fehlversuchen
+System Access;EnableGuestAccount;=;0;Gastkonto aus
+Registry Values;MACHINE\System\CurrentControlSet\Control\Lsa\LmCompatibilityLevel;=;5;Nur NTLMv2
+Registry Values;MACHINE\System\CurrentControlSet\Services\LanManServer\Parameters\RequireSecuritySignature;=;1;SMB-Signierung verlangen
+Registry Values;MACHINE\System\CurrentControlSet\Control\Lsa\RestrictAnonymous;=;1;Anonyme Aufzählung einschränken
+System Access;AuditLogonEvents;=;3;Nicht in der Vorlage vorhanden (Beispiel für fehlende Einstellung)

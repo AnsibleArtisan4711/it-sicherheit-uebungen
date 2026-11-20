@@ -1,0 +1,24 @@
+
+## 1. Ohne Diensterkennung: Name kommt aus der Portnummer (nmap-services), nicht aus dem Dienst
+135/tcp  open  msrpc
+139/tcp  open  netbios-ssn
+445/tcp  open  microsoft-ds
+3389/tcp open  ms-wbt-server
+5985/tcp open  wsman
+
+## 2. Mit Diensterkennung (-sV): Nmap fragt den Dienst, was er ist
+135/tcp open tcpwrapped
+139/tcp open tcpwrapped
+445/tcp open tcpwrapped
+3389/tcp open http SimpleHTTPServer 0.6 (Python 3.13.18)
+5985/tcp open http SimpleHTTPServer 0.6 (Python 3.13.18)
+
+## 3. Was die Ports bei einem echten Windows-System bedeuten (Fachwissen, hier nicht gemessen)
+135   RPC-Endpunktzuordnung (Dienste melden hier ihre dynamischen Ports an)
+139   NetBIOS-Sitzungsdienst (alt)
+445   SMB direkt über TCP (Dateifreigaben; SMBv1 abschalten)
+3389  Remotedesktop (RDP); nicht aus dem Internet erreichbar machen, Netzwerkebenen-Authentifizierung verlangen
+5985  WinRM über HTTP (PowerShell-Remoting); 5986 ist die Variante mit TLS
+
+## 4. Folgerung für die Auswertung
+Ein Portname im Bericht ist eine Vermutung. Wichtig ist, was tatsächlich antwortet: Befunde mit -sV oder einem authentifizierten Scan belegen.

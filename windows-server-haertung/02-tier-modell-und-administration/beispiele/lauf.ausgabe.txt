@@ -1,0 +1,11 @@
+2026-11-02 08:01  adm-anna      T1 -> srv-file01  T1  ok
+2026-11-02 08:15  adm-anna      T1 -> ws-user07   T2  VERLETZUNG: Konto der Stufe 1 meldet sich an Stufe 2 an (interaktiv): Zugangsdaten bleiben auf dem niedrigeren Rechner
+2026-11-02 09:00  adm-tom       T0 -> dc01        T0  ok
+2026-11-02 09:20  adm-tom       T0 -> srv-app01   T1  VERLETZUNG: Konto der Stufe 0 meldet sich an Stufe 1 an (RDP): Zugangsdaten bleiben auf dem niedrigeren Rechner
+2026-11-02 10:05  helpdesk-lea  T2 -> ws-user07   T2  ok
+2026-11-02 10:30  helpdesk-lea  T2 -> srv-file01  T1  VERLETZUNG: Konto der Stufe 2 greift auf Stufe 1 zu (Netzwerk)
+2026-11-02 11:00  svc-backup    T1 -> dc01        T0  VERLETZUNG: Konto der Stufe 1 greift auf Stufe 0 zu (Dienst)
+2026-11-02 11:10  adm-tom       T0 -> ws-user12   T2  VERLETZUNG: Konto der Stufe 0 meldet sich an Stufe 2 an (interaktiv): Zugangsdaten bleiben auf dem niedrigeren Rechner
+2026-11-02 12:00  anna          T2 -> ws-user07   T2  ok
+
+Verletzungen: 5

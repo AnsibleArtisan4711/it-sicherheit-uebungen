@@ -1,0 +1,32 @@
+
+## 1. Passwortqualität: pwscore mit der Konfiguration (minlen 12, 3 Zeichenklassen)
+kurz1A                 -> The password is shorter than 12 characters
+passwortpasswort       -> The password contains less than 3 character classes
+Sommer2026             -> The password is shorter than 12 characters
+Kohl-Rabe-7-Treppe!    -> 100
+aaaBBB111!!!xyz        -> The password contains more than 2 same characters consecutively
+
+(Konfiguration im Test: /etc/security/pwquality.conf.d/p14.conf; Ergebnis = Punktzahl 0 bis 100, sonst Fehlermeldung)
+
+## 2. Dasselbe ohne eigene Konfiguration (nur Vorgaben des Programms)
+kurz1A                 -> The password is shorter than 8 characters
+Sommer2026             -> 50
+
+## 3. pwmake erzeugt ein Passwort mit 80 Bit Entropie
+Länge: 17
+
+## 4. Kontosperre mit pam_faillock (3 Fehlversuche, 60 s Sperre)
+Versuch mit 'falsch1': abgelehnt
+Versuch mit 'falsch2': abgelehnt
+Versuch mit 'falsch3': abgelehnt
+Versuch mit 'richtiges Passwort (nach 3 Fehlversuchen)': abgelehnt
+
+$ faillock --dir /tmp/p14-faillock --user p14test
+p14test:
+When                Type  Source                                           Valid
+2026-11-20 04:29:32 SVC   p14-test                                             V
+2026-11-20 04:29:34 SVC   p14-test                                             V
+2026-11-20 04:29:35 SVC   p14-test                                             V
+
+$ faillock --dir /tmp/p14-faillock --user p14test --reset
+Versuch mit 'richtiges Passwort (nach Entsperren)': ERFOLG

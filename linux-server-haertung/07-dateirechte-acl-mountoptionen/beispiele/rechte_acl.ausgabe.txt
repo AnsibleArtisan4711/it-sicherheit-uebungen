@@ -1,0 +1,65 @@
+
+## 1. Mount-Optionen des Test-Dateisystems (findmnt)
+TARGET       FSTYPE OPTIONS
+/tmp/p14-mnt ext4   rw,nosuid,nodev,noexec,relatime
+
+## 2. noexec: ein Skript auf diesem Dateisystem lässt sich nicht starten
+$ /tmp/p14-mnt/test.sh
+07-dateirechte-acl-mountoptionen/rechte_acl.sh: line 16: /tmp/p14-mnt/test.sh: Permission denied
+$ sh /tmp/p14-mnt/test.sh   (Interpreter umgeht noexec für Skripte, nicht für Binärdateien)
+Skript gestartet
+$ /tmp/p14-mnt/true-kopie
+07-dateirechte-acl-mountoptionen/rechte_acl.sh: line 18: /tmp/p14-mnt/true-kopie: Permission denied
+Rückgabewert: 126
+
+## 3. Klassische Rechte: Gruppenverzeichnis mit setgid und Sticky-Bit
+drwxrws--- root t14team /tmp/p14-mnt/projekt
+drwxrwxrwt root root /tmp/p14-mnt/tmp-ablage
+-rw-r--r-- t14a t14team datei-a.txt
+(neue Datei erbt die Gruppe t14team wegen setgid)
+$ t14b versucht, in projekt zu schreiben (kein Mitglied)
+touch: cannot touch '/tmp/p14-mnt/projekt/datei-b.txt': Permission denied
+$ t14b versucht, die Datei von t14a im Sticky-Verzeichnis zu löschen
+rm: cannot remove '/tmp/p14-mnt/tmp-ablage/a.txt': Operation not permitted
+
+## 4. ACL: t14b darf lesen, aber nicht schreiben (setfacl), Standard-ACL für neue Dateien
+user::rwx
+user:t14b:r-x
+group::rwx
+mask::rwx
+other::---
+default:user::rwx
+default:user:t14b:r--
+default:group::rwx
+default:mask::rwx
+default:other::---
+$ getfacl datei-neu.txt
+user::rw-
+user:t14b:r--
+group::rwx	#effective:rw-
+mask::rw-
+other::---
+$ t14b liest / schreibt datei-neu.txt
+lesen: erlaubt
+sh: 1: cannot create /tmp/p14-mnt/projekt/datei-neu.txt: Permission denied
+
+## 5. Unveränderbar machen mit chattr +i (auch root kann dann nicht ändern)
+----i---------e------- konfig.txt
+$ rm konfig.txt
+rm: cannot remove '/tmp/p14-mnt/konfig.txt': Operation not permitted
+$ chattr -i; rm
+gelöscht
+
+## 6. umask: Standardrechte neuer Dateien
+umask 022: Datei 644, Verzeichnis 755
+umask 027: Datei 640, Verzeichnis 750
+umask 077: Datei 600, Verzeichnis 700
+
+## 7. SUID/SGID-Dateien auf dem System suchen (nur Anzahl und Namen)
+chage chfn chsh crontab dbus-daemon-launch-helper dotlockfile expiry fusermount3 gpasswd mount 
+newgrp pam_extrausers_chkpwd passwd polkit-agent-helper-1 postdrop postqueue ssh-agent ssh-keysign 
+su sudo umount unix_chkpwd utempter 
+Anzahl: 23
+
+## 8. Weltweit schreibbare Dateien und Verzeichnisse ohne Sticky-Bit (Prüfung, erwartet: keine)
+(Ende der Liste)

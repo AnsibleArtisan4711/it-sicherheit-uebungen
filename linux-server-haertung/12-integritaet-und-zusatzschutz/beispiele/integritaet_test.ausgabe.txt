@@ -1,0 +1,41 @@
+
+## 1. Version
+AIDE 0.18.6
+
+## 2. Konfiguration prüfen und Datenbank anlegen (aide --init)
+Rückgabewert --config-check: 0
+Start timestamp: (Zeit weggelassen)
+AIDE successfully initialized database.
+Number of entries:	5
+
+## 3. Prüfung ohne Änderung (aide --check): Rückgabewert 0 = keine Abweichung
+Rückgabewert: 0
+
+## 4. Änderungen vornehmen: Inhalt ändern, Datei hinzufügen, Rechte ändern
+
+## 5. Prüfung nach den Änderungen
+  Total number of entries:	6
+  Added entries:		1
+  Removed entries:		0
+  Changed entries:		2
+Added entries:
+f+++++++++++++++++: baum/etc/unerwartet.conf
+Changed entries:
+f = p.. . ...     : baum/bin/tool
+f > ... . ..H     : baum/etc/dienst.conf
+Rückgabewert (Bitmaske, 0 = keine Abweichung): 5
+
+## 6. fail2ban-regex: Filter 'sshd' gegen eine Beispiel-Protokolldatei
+1.0.2
+Failregex: 9 total
+Ignoreregex: 0 total
+Lines: 9 lines, 2 ignored, 7 matched, 0 missed
+
+Beispielhafte Jail-Einstellung (jail.local, hier nicht aktiviert):
+[sshd]
+enabled  = true
+port     = ssh
+maxretry = 3
+findtime = 10m
+bantime  = 1h
+ignoreip = 127.0.0.1/8 10.14.0.0/24

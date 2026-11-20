@@ -1,0 +1,7 @@
+srv-dc01     dc      Alter   8 Tage (Frist 14)  ok
+srv-file01   server  Alter  51 Tage (Frist 30)  ÜBERFÄLLIG um 21 Tage
+srv-app01    server  Alter  10 Tage (Frist 30)  Neustart steht aus (Patch noch nicht wirksam)
+srv-old01    server  Alter 232 Tage (Frist 30)  ÜBERFÄLLIG um 202 Tage
+ws-user07    client  Alter  15 Tage (Frist 21)  ok
+
+Behandlungsbedarf: 3 von 5 Rechnern

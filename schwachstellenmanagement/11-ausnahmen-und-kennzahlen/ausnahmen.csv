@@ -1,0 +1,5 @@
+id;befund;host;begruendung;kompensation;verantwortlich;gueltig_bis;risiko_akzeptiert_von
+X-01;Veraltetes TLS auf Altsystem;10.15.0.40;Hersteller liefert kein Update, Ablösung geplant;Zugriff nur aus Verwaltungsnetz (Firewall);Bereichsleitung Technik;2026-12-31;Geschäftsführung
+X-02;SMB-Signierung nicht erzwungen;10.15.0.12;Kompatibilität mit Messgerät;keine;Teamleitung Betrieb;2026-10-31;
+X-03;Dateiliste auf Testserver;10.15.0.30;Testsystem ohne Daten;Testsystem im isolierten Netz;Teamleitung Betrieb;2027-03-31;Teamleitung Betrieb
+X-04;Klartext-Anmeldedienst;10.15.0.50;;;;2026-11-25;

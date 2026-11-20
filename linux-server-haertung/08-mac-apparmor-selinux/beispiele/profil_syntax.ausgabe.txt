@@ -1,0 +1,42 @@
+
+## 1. Zustand der Sicherheitsmodule auf diesem System
+$ aa-status
+apparmor not present.
+Rückgabewert: 1
+$ getenforce
+Disabled
+$ sestatus
+SELinux status:                 disabled
+
+Aktive Linux-Sicherheitsmodule laut Kernel:
+(Datei nicht lesbar: securityfs nicht eingehängt)
+
+## 2. Ein Profil für ein Beispielprogramm (Datei /tmp/p14-aa/usr.local.bin.t14app)
+#include <tunables/global>
+
+/usr/local/bin/t14app flags=(complain) {
+  #include <abstractions/base>
+
+  /usr/local/bin/t14app mr,
+  /etc/t14app/** r,
+  /var/log/t14app.log w,
+  deny /etc/shadow r,
+  network inet stream,
+}
+
+## 3. Syntaxprüfung ohne Laden in den Kernel (apparmor_parser -Q -K)
+Rückgabewert: 0
+
+## 4. Absichtlich fehlerhaftes Profil (Zugriffsbuchstabe z ist ungültig)
+AppArmor parser error for fehler in profile fehler at line 7: syntax error, unexpected TOK_ID, expecting TOK_MODE
+Rückgabewert: 1
+
+## 5. Betriebsarten im Profil: complain (nur protokollieren) und enforce (durchsetzen)
+Profil enthält: flags=(complain)
+enforce-Variante: Syntax in Ordnung (Rückgabewert 0)
+
+## 6. Mitgelieferte Bausteine des Pakets (Beispiele aus /etc/apparmor.d/abstractions)
+abstractions/base
+abstractions/nameservice
+abstractions/openssl
+abstractions/ssl_certs

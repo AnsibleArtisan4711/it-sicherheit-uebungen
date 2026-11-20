@@ -1,0 +1,43 @@
+
+## 1. Erster Scan (Ausgangslage)
+id | host | port | regel | titel | schwere
+F-001 | 10.15.0.11 | 22 | R3 | SSH erlaubt Anmeldung mit Passwort | mittel
+F-002 | 10.15.0.11 | 443 | R1 | Veraltetes TLS-Protokoll (TLS 1.0 oder 1.1) angeboten | mittel
+F-003 | 10.15.0.11 | 443 | R2 | TLS mit anonymem Schlüsselaustausch angeboten (kein Schutz vor Mitlesen und Fälschung) | hoch
+F-004 | 10.15.0.11 | 443 | R6 | HTTPS ohne Strict-Transport-Security (HSTS) | niedrig
+F-005 | 10.15.0.11 | 2323 | R5 | Dienst mit Klartext-Anmeldung (Telnet-ähnliche Kennung login:) | hoch
+F-006 | 10.15.0.11 | 8080 | R4 | Webserver zeigt Dateiliste eines Verzeichnisses | mittel
+
+## 2. Maßnahmen umsetzen (im Labor: Ziel mit gehärteter Konfiguration neu starten)
+TLS nur 1.2/1.3 mit guten Chiffren, Sicherheits-Header setzen, SSH nur mit Schlüssel, Dateiliste und Klartextdienst abschalten
+
+## 3. Zweiter Scan (Nachweis)
+id | host | port | regel | titel | schwere
+
+## 4. Vergleich der beiden Scans (scan_vergleich.py)
+BEHOBEN (nur im ersten Scan): 6
+  10.15.0.11:22  SSH erlaubt Anmeldung mit Passwort  [mittel]
+  10.15.0.11:2323  Dienst mit Klartext-Anmeldung (Telnet-ähnliche Kennung login:)  [hoch]
+  10.15.0.11:443  Veraltetes TLS-Protokoll (TLS 1.0 oder 1.1) angeboten  [mittel]
+  10.15.0.11:443  TLS mit anonymem Schlüsselaustausch angeboten (kein Schutz vor Mitlesen und Fälschung)  [hoch]
+  10.15.0.11:443  HTTPS ohne Strict-Transport-Security (HSTS)  [niedrig]
+  10.15.0.11:8080  Webserver zeigt Dateiliste eines Verzeichnisses  [mittel]
+NEU (nur im zweiten Scan): 0
+UNVERÄNDERT OFFEN: 0
+
+Ergebnis: 6 von 6 Befunden behoben, 0 neu, 0 offen
+Rückgabewert: 0
+
+## 5. Gegenprobe: unvollständige Behebung (nur TLS gehärtet, der Rest bleibt)
+BEHOBEN (nur im ersten Scan): 3
+  10.15.0.11:443  Veraltetes TLS-Protokoll (TLS 1.0 oder 1.1) angeboten  [mittel]
+  10.15.0.11:443  TLS mit anonymem Schlüsselaustausch angeboten (kein Schutz vor Mitlesen und Fälschung)  [hoch]
+  10.15.0.11:443  HTTPS ohne Strict-Transport-Security (HSTS)  [niedrig]
+NEU (nur im zweiten Scan): 0
+UNVERÄNDERT OFFEN: 3
+  10.15.0.11:22  SSH erlaubt Anmeldung mit Passwort  [mittel]
+  10.15.0.11:2323  Dienst mit Klartext-Anmeldung (Telnet-ähnliche Kennung login:)  [hoch]
+  10.15.0.11:8080  Webserver zeigt Dateiliste eines Verzeichnisses  [mittel]
+
+Ergebnis: 3 von 6 Befunden behoben, 0 neu, 3 offen
+Rückgabewert: 1 (ungleich 0 = es bleibt etwas offen oder ist neu)

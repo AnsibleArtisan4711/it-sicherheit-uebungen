@@ -1,0 +1,12 @@
+ 1 FEHLER  SSH: Root-Anmeldung verboten
+ 2 FEHLER  SSH: Passwortanmeldung aus
+ 3 FEHLER  SSH: höchstens 4 Versuche (MaxAuthTries)
+ 4 ok      Nur root hat UID 0
+ 5 ok      Kein Konto mit leerem Passwort
+ 6 ok      /etc/shadow nicht weltlesbar
+ 7 ok      sudoers-Dateien syntaktisch in Ordnung
+ 8 FEHLER  Maximales Passwortalter höchstens 90 Tage
+ 9 FEHLER  Standard-umask mindestens 027
+10 FEHLER  Anmeldebanner gesetzt (/etc/issue.net)
+
+Ergebnis: 4 von 10 Prüfungen bestanden, 6 Fehler

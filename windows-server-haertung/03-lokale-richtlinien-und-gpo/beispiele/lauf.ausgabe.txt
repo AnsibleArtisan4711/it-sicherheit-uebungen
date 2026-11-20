@@ -1,0 +1,14 @@
+--- 1. Normaler Ablauf (lokal, Domäne, OU)
+  Gastkonto                  = 0       aus Domain-Baseline (domaene)
+  MinPasswortLaenge          = 10      aus Webserver-Ausnahme (ou-server-web)
+  RDP-NLA                    = 1       aus Server-Baseline (ou-server)
+  SMBSignierung              = 1       aus Server-Baseline (ou-server)
+--- 2. Domain-Baseline erzwungen: die Webserver-Ausnahme (Länge 10) greift nicht mehr
+  Gastkonto                  = 0       aus Domain-Baseline (domaene)
+  MinPasswortLaenge          = 14      aus Domain-Baseline (domaene)
+  RDP-NLA                    = 1       aus Server-Baseline (ou-server)
+  SMBSignierung              = 1       aus Domain-Baseline (domaene)
+--- 3. Vererbung auf der OU „ou-server“ blockiert (Domain-Baseline nicht erzwungen): Domänenwerte fehlen
+  MinPasswortLaenge          = 10      aus Webserver-Ausnahme (ou-server-web)
+  RDP-NLA                    = 1       aus Server-Baseline (ou-server)
+  SMBSignierung              = 1       aus Server-Baseline (ou-server)

@@ -1,0 +1,8 @@
+name;erlaubt;begruendung
+W32Time;ja;Zeitsynchronisation
+WinRM;ja;Verwaltung (nur aus dem Verwaltungsnetz)
+TermService;ja;Verwaltung per RDP mit Netzwerkebenen-Authentifizierung
+Spooler;nein;Druckdienst auf Dateiserver nicht nötig (Angriffsfläche)
+RemoteRegistry;nein;Fernzugriff auf die Registrierung nicht nötig
+FTPSVC;nein;Klartextprotokoll
+SNMP;nein;Nicht verwendet

@@ -1,0 +1,55 @@
+
+## Werkzeuge
+OpenSSH_9.6p1 Ubuntu-3ubuntu13.20, OpenSSL 3.0.13 30 Jan 2024
+Name: ssh-audit Version: 3.9.0 
+
+## 1. Konfiguration prüfen: sshd -t und wirksame Werte mit sshd -T
+$ sshd -t -f /tmp/p14-ssh/sshd_gehaertet.conf
+Rückgabewert sshd -t: 0
+$ sshd -T -f gehaertet | grep -E "^(permitrootlogin|passwordauthentication|allowgroups|maxauthtries|x11forwarding|allowtcpforwarding)"
+maxauthtries 3
+permitrootlogin no
+passwordauthentication no
+x11forwarding no
+allowtcpforwarding no
+allowgroups t14sshgrp
+
+$ sshd -t mit absichtlichem Tippfehler (PermitRotLogin)
+/tmp/p14-ssh/falsch.conf: line 1: Bad configuration option: PermitRotLogin
+/tmp/p14-ssh/falsch.conf: terminating, 1 bad configuration options
+Rückgabewert: 255
+
+## 2. Ausgangszustand: Anmeldungen mit Passwort und als root
+$ ssh -p 2222 -o PreferredAuthentications=password root@10.14.0.1  (Passwortanmeldung als root, Vorgabe)
+root@10.14.0.1: Permission denied (publickey,password,keyboard-interactive).
+(BatchMode verhindert die Passwortabfrage; 'Permission denied (publickey,password...)' zeigt, dass Passwortanmeldung angeboten wird)
+
+## 3. ssh-audit gegen den Ausgangszustand (Zahl der Fehler und Warnungen, Auszug der Fehler)
+Anzahl [fail]: 5   Anzahl [warn]: 17
+(kex) ecdh-sha2-nistp256 -- [fail] using elliptic curves that are suspected as being backdoored by the U.S. National Sec
+(kex) ecdh-sha2-nistp384 -- [fail] using elliptic curves that are suspected as being backdoored by the U.S. National Sec
+(kex) ecdh-sha2-nistp521 -- [fail] using elliptic curves that are suspected as being backdoored by the U.S. National Sec
+(mac) hmac-sha1-etm@openssh.com -- [fail] using broken SHA-1 hash algorithm
+(mac) hmac-sha1 -- [fail] using broken SHA-1 hash algorithm
+
+## 4. Gehärteter sshd: Anmeldungen
+$ ssh t14ssh@10.14.0.1 hostname   (Schlüssel, Gruppe t14sshgrp: erlaubt)
+angemeldet als t14ssh
+$ ssh t14fremd@10.14.0.1 hostname (Schlüssel, aber nicht in AllowGroups)
+t14fremd@10.14.0.1: Permission denied (publickey).
+$ ssh root@10.14.0.1 (PermitRootLogin no)
+root@10.14.0.1: Permission denied (publickey).
+$ ssh -o PreferredAuthentications=password t14ssh@10.14.0.1
+t14ssh@10.14.0.1: Permission denied (publickey).
+$ ssh -f -N -L 8080:127.0.0.1:80 t14ssh@10.14.0.1; curl http://127.0.0.1:8080/   (AllowTcpForwarding no)
+curl Rückgabewert: 56
+
+## 5. Protokoll des Servers (VERBOSE, Auszug; Zeit, Prozessnummer und Port weggelassen)
+      4 Accepted key ED25519 SHA256:… found at /home/t14ssh/.ssh/authorized_keys:1
+      2 Accepted publickey for t14ssh from 10.14.0.2 ssh2: ED25519 SHA256:…
+      1 refused local port forward: originator 127.0.0.1, target 127.0.0.1 port 80
+      1 User t14fremd from 10.14.0.2 not allowed because none of user's groups are listed in AllowGroups
+      1 User root from 10.14.0.2 not allowed because none of user's groups are listed in AllowGroups
+
+## 6. ssh-audit gegen die gehärtete Konfiguration (gleiche Auswertung)
+Anzahl [fail]: 0   Anzahl [warn]: 2

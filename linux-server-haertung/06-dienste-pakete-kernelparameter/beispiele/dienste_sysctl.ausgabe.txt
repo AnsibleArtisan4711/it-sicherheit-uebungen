@@ -1,0 +1,63 @@
+
+## 1. Ausgangszustand: drei Dienste lauschen auf allen Adressen (ss -tulpn im Namespace srv)
+tcp  0.0.0.0:2323           prozess=nc
+tcp  0.0.0.0:8080           prozess=python3
+udp  0.0.0.0:5353           prozess=socat
+
+## 2. Von außen erreichbar? (Namespace cl)
+tcp/8080 offen
+tcp/2323 offen
+
+## 3. Nicht benötigte Dienste beenden (Telnet-ähnlicher Port 2323, UDP-Echo 5353) und Webdienst an die Management-Adresse binden
+tcp  127.0.0.1:8080         prozess=python3
+tcp/8080 geschlossen
+tcp/2323 geschlossen
+
+## 4. Kernel-Parameter: Soll-Ist-Vergleich (sysctl -n, Auszug)
+Parameter                                  Ist    Soll   Status
+kernel.randomize_va_space                  2      2      ok
+fs.protected_hardlinks                     1      1      ok
+fs.protected_symlinks                      0      1      ABWEICHUNG
+fs.suid_dumpable                           0      0      ok
+kernel.dmesg_restrict                      1      1      ok
+kernel.kptr_restrict                       0      2      ABWEICHUNG
+kernel.unprivileged_bpf_disabled           1      1      ok
+net.ipv4.tcp_syncookies                    1      1      ok
+net.ipv4.conf.all.rp_filter                0      1      ABWEICHUNG
+net.ipv4.conf.all.accept_redirects         1      0      ABWEICHUNG
+net.ipv4.conf.all.send_redirects           1      0      ABWEICHUNG
+net.ipv4.conf.all.accept_source_route      0      0      ok
+net.ipv4.conf.all.log_martians             0      1      ABWEICHUNG
+net.ipv4.icmp_echo_ignore_broadcasts       1      1      ok
+net.ipv6.conf.all.accept_ra                fehlt  0      ABWEICHUNG
+
+## 5. Abweichende Netzwerk-Parameter im Namespace srv setzen (sysctl -w) und erneut prüfen
+gesetzt: net.ipv4.tcp_syncookies=1
+gesetzt: net.ipv4.conf.all.rp_filter=1
+gesetzt: net.ipv4.conf.all.accept_redirects=0
+gesetzt: net.ipv4.conf.all.send_redirects=0
+gesetzt: net.ipv4.conf.all.accept_source_route=0
+gesetzt: net.ipv4.conf.all.log_martians=1
+gesetzt: net.ipv4.icmp_echo_ignore_broadcasts=1
+Parameter                                  Ist    Soll   Status
+net.ipv4.tcp_syncookies                    1      1      ok
+net.ipv4.conf.all.rp_filter                1      1      ok
+net.ipv4.conf.all.accept_redirects         0      0      ok
+net.ipv4.conf.all.send_redirects           0      0      ok
+net.ipv4.conf.all.accept_source_route      0      0      ok
+net.ipv4.conf.all.log_martians             1      1      ok
+net.ipv4.icmp_echo_ignore_broadcasts       1      1      ok
+net.ipv6.conf.all.accept_ra                fehlt  0      ABWEICHUNG
+
+## 6. Dauerhaft: Datei /etc/sysctl.d/99-haertung.conf (Beispiel, hier nicht angelegt): Zeilenformat und Existenz der Schlüssel prüfen
+kernel.randomize_va_space = 2
+fs.protected_hardlinks = 1
+fs.protected_symlinks = 1
+fs.suid_dumpable = 0
+…
+(Absichtlich kein 'sysctl -p' im Testlabor: Es würde die Kernel-Parameter des Hosts ändern.)
+Schlüssel fehlt auf diesem System: net.ipv6.conf.all.accept_ra
+
+## 7. Pakete: Beispiel für unerwünschte Altlasten (nur Prüfung, keine Änderung)
+keines der geprüften Altpakete installiert
+Installierte Pakete insgesamt: 1299

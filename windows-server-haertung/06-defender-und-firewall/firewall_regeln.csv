@@ -1,0 +1,7 @@
+name;richtung;aktion;protokoll;lokaler_port;remote_adresse;profil;aktiv
+Dateifreigabe SMB;Inbound;Allow;TCP;445;10.14.0.0/24;Domain;ja
+RDP Verwaltung;Inbound;Allow;TCP;3389;Any;Any;ja
+WinRM HTTP;Inbound;Allow;TCP;5985;10.14.0.10;Domain;ja
+Test alles erlaubt;Inbound;Allow;Any;Any;Any;Any;ja
+Ping;Inbound;Allow;ICMPv4;Any;10.14.0.0/24;Domain;ja
+Alter FTP-Zugang;Inbound;Allow;TCP;21;Any;Any;nein

@@ -1,0 +1,14 @@
+[Unicode]
+Unicode=yes
+[System Access]
+MinimumPasswordAge = 1
+MaximumPasswordAge = 90
+MinimumPasswordLength = 8
+PasswordComplexity = 1
+PasswordHistorySize = 5
+LockoutBadCount = 0
+EnableGuestAccount = 0
+[Registry Values]
+MACHINE\System\CurrentControlSet\Control\Lsa\LmCompatibilityLevel=4,3
+MACHINE\System\CurrentControlSet\Services\LanManServer\Parameters\RequireSecuritySignature=4,0
+MACHINE\System\CurrentControlSet\Control\Lsa\RestrictAnonymous=4,0

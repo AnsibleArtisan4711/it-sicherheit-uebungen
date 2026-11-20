@@ -1,0 +1,49 @@
+## Version
+Sudo version 1.9.15p5
+
+## 1. Regeldatei nach Least Privilege (nur zwei Befehle, mit Protokoll)
+$ visudo -cf /etc/sudoers.d/t14-test
+/etc/sudoers.d/t14-test: parsed OK
+
+## 2. Absichtlich kaputte Datei: visudo meldet den Fehler, bevor sudo kaputtgeht
+$ visudo -cf /etc/sudoers.d/t14-kaputt
+/etc/sudoers.d/t14-kaputt:1:40: syntax error
+t14gast ALL=(root) NOPASSWD /usr/bin/id
+                                       ^
+Rückgabewert: 1
+
+## 3. Effektive Rechte anzeigen
+$ sudo -l -U t14ops
+Matching Defaults entries for t14ops on vm:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty, logfile=/tmp/p14-sudo.log, use_pty, !visiblepw, timestamp_timeout=5
+
+User t14ops may run the following commands on vm:
+    (root) NOPASSWD: /usr/bin/id, /usr/bin/tail /var/log/syslog
+
+$ sudo -l -U t14gast
+User t14gast is not allowed to run sudo on vm.
+
+## 4. Erlaubter und verweigerter Aufruf (als t14ops, ohne Passwortabfrage: sudo -n)
+$ sudo -n /usr/bin/id
+uid=0(root) gid=0(root) groups=0(root)
+$ sudo -n /usr/bin/cat /etc/shadow
+sudo: a password is required
+$ sudo -n -u root /bin/bash   (Shell wäre zu mächtig)
+sudo: a password is required
+
+## 5. Als t14gast (keine Regel)
+sudo: a password is required
+
+## 6. Protokolldatei der Regel (Zeit und Benutzer weggelassen)
+t14ops :
+    PWD=/home/claude/gen35/out_nf2/it-sicherheit-uebungen/linux-server-haertung
+    ; USER=root ; COMMAND=/usr/bin/id
+t14ops : a password is required ;
+    PWD=/home/claude/gen35/out_nf2/it-sicherheit-uebungen/linux-server-haertung
+    ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow
+t14ops : a password is required ;
+    PWD=/home/claude/gen35/out_nf2/it-sicherheit-uebungen/linux-server-haertung
+    ; USER=root ; COMMAND=/bin/bash -c id
+
+## 7. Gefahren: Befehle, die aus sudo eine Shell machen (Auszug, keine Ausführung)
+vi, less, man, find -exec, awk, python, tar --checkpoint-action, systemctl (Pager) – nicht ohne Einschränkung freigeben (NOEXEC)

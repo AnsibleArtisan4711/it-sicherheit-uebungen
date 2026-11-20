@@ -1,0 +1,12 @@
+id;host;port;titel;schweregrad;cvss;erkennung;qod
+N-001;10.15.0.11;443;TLS 1.0 angeboten;mittel;5.9;ja;98
+N-002;10.15.0.11;22;SSH Passwortanmeldung;mittel;5.9;ja;95
+N-003;10.15.0.11;8080;Dateiliste sichtbar;mittel;5.3;ja;99
+N-004;10.15.0.11;2323;Klartext-Anmeldedienst;hoch;8.1;ja;80
+N-005;10.15.0.11;443;HSTS fehlt;niedrig;3.7;ja;99
+N-006;10.15.0.11;80;Server-Version im Header sichtbar;niedrig;2.6;ja;99
+N-007;10.15.0.11;22;Veraltete OpenSSH-Version (nur Versionsabgleich);hoch;7.5;nein;30
+N-008;10.15.0.12;445;SMB-Signierung nicht erzwungen;mittel;5.3;ja;80
+N-009;10.15.0.12;3389;RDP ohne Netzwerkauthentifizierung;hoch;7.5;ja;90
+N-010;10.15.0.12;135;RPC-Endpunkte auslesbar;niedrig;0.0;ja;70
+N-011;10.15.0.12;445;Veraltete SMB-Version aktiv;kritisch;9.8;nein;50

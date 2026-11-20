@@ -1,0 +1,8 @@
+srv-file01   gültig bis 2026-12-10 (noch 19 Tage)
+srv-app01    ABGELAUFEN seit 20 Tagen (2026-11-01)
+srv-old01    KEIN LAPS-KENNWORT im Verzeichnis
+ws-user07    gültig bis 2026-12-28 (noch 37 Tage)
+
+Rechner mit Handlungsbedarf: 2 (Stichtag 2026-11-20)
+
+20 Zeichen erzeugt (Wert wird nicht angezeigt)

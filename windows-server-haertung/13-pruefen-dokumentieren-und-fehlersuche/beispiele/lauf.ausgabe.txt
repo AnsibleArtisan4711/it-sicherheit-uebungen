@@ -1,0 +1,9 @@
+Bereich              Befunde    Beispiele
+Sicherheitsvorlage   6          MinimumPasswordLength
+Konten               3          Administrator
+Dienste              4          Spooler
+Firewall             3          RDP Verwaltung
+Überwachung          5          Logon
+Fernzugriff          3          srv-file01
+
+Befunde gesamt: 24. Jeder Befund braucht Maßnahme, Verantwortlichen und Frist oder eine begründete Ausnahme.

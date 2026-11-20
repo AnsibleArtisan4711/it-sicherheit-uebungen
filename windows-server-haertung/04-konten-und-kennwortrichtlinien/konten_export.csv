@@ -1,0 +1,7 @@
+konto;typ;aktiv;kennwort_laeuft_nie_ab;letzte_anmeldung;gruppen
+Administrator;lokal;ja;ja;2026-11-01;Administratoren
+Gast;lokal;nein;ja;;Gäste
+adm-tom;domaene;ja;nein;2026-11-02;Domänen-Admins
+svc-sql;dienst;ja;ja;2026-11-02;Administratoren
+anna;domaene;ja;nein;2026-11-02;Benutzer
+ehemalig-max;domaene;ja;nein;2025-12-10;Benutzer, Remotedesktopbenutzer

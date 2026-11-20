@@ -1,0 +1,20 @@
+Stichtag: 2026-11-20, Warnung ab 30 Tagen vor Ablauf
+X-01  Veraltetes TLS auf Altsystem           10.15.0.40   in Ordnung (noch 41 Tage)
+X-02  SMB-Signierung nicht erzwungen         10.15.0.12   Pflichtfelder leer: risiko_akzeptiert_von; ABGELAUFEN seit 20 Tagen: Befund wieder offen
+X-03  Dateiliste auf Testserver              10.15.0.30   in Ordnung (noch 131 Tage)
+X-04  Klartext-Anmeldedienst                 10.15.0.50   Pflichtfelder leer: begruendung, kompensation, verantwortlich, risiko_akzeptiert_von; läuft in 5 Tagen ab: Verlängerung oder Behebung planen
+
+Ausnahmen mit Handlungsbedarf: 2
+
+Stichtag: 2026-11-20, Befunde: 8
+
+Mittlere Behebungsdauer (MTTR) in Tagen:
+  P1: 8.5 Tage (2 Befunde)
+  P2: 19.0 Tage (1 Befunde)
+  P3: 38.5 Tage (2 Befunde)
+
+Fristeinhaltung bei behobenen Befunden: 4 von 5 (80 %)
+Offene Befunde: 3 (V-06, V-07, V-08)
+Überfällige offene Befunde: 2
+  V-06 (P2, 41 Tage offen, Frist 30)
+  V-08 (P1, 10 Tage offen, Frist 7)

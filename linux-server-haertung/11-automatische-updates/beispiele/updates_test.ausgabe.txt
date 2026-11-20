@@ -1,0 +1,49 @@
+
+## 1. Version und Ausgangseinstellungen
+unattended-upgrades 2.9.1+nmu4ubuntu1
+$ cat /etc/apt/apt.conf.d/20auto-upgrades
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";
+$ apt-config dump | grep -E "Periodic|Unattended-Upgrade::(Automatic-Reboot|Remove|Mail)"
+APT::Periodic::Enable "0";
+APT::Periodic::Unattended-Upgrade "1";
+APT::Periodic::Update-Package-Lists "1";
+
+## 2. Erlaubte Herkünfte (nur Sicherheitsupdates der Distribution)
+"${distro_id}:${distro_codename}";
+"${distro_id}:${distro_codename}-security";
+"${distro_id}ESMApps:${distro_codename}-apps-security";
+"${distro_id}ESM:${distro_codename}-infra-security";
+
+## 3. Eigene Einstellungen als Zusatzdatei /etc/apt/apt.conf.d/52-p14-haertung
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";
+APT::Periodic::AutocleanInterval "7";
+Unattended-Upgrade::Remove-Unused-Dependencies "true";
+Unattended-Upgrade::Automatic-Reboot "false";
+Unattended-Upgrade::Mail "root";
+Unattended-Upgrade::MailReport "on-change";
+
+$ apt-config dump | grep -E "Remove-Unused|Automatic-Reboot|MailReport"
+Unattended-Upgrade::Automatic-Reboot "false";
+Unattended-Upgrade::MailReport "on-change";
+Unattended-Upgrade::Remove-Unused-Dependencies "true";
+
+## 4. Simulation: was würde installiert? (apt-get -s dist-upgrade, Zahl der Pakete)
+Pakete zur Aktualisierung (Simulation): 49
+Pakete mit Haltemarkierung (apt-mark hold): 0
+
+## 5. Probelauf von unattended-upgrade (--dry-run, dauert etwa eine Minute)
+Rückgabewert: 0
+INFO All upgrades installed
+INFO Starting unattended upgrades script
+INFO Allowed origins are: o=Ubuntu,a=noble, o=Ubuntu,a=noble-security, o=UbuntuESMApps,a=noble-apps-security, o=UbuntuESM,a=noble-infra-security
+INFO Initial blacklist: 
+INFO Packages that will be upgraded: 45 Pakete (Namen weggelassen)
+INFO All upgrades installed
+
+## 6. Hinweis zu Neustarts: needrestart (nur Anzeige)
+NEEDRESTART-VER: 3.6
+NEEDRESTART-KCUR: 6.18.44-fc-v726
+NEEDRESTART-KSTA: 0
+NEEDRESTART-UCSTA: 1
