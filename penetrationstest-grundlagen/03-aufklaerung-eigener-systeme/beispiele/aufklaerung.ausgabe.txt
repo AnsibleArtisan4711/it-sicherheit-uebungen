@@ -1,0 +1,31 @@
+
+## 1. Von innen: welche Ports lauschen auf 127.0.0.1 (nur unsere Labor-Ports)?
+127.0.0.1:2121
+127.0.0.1:2222
+127.0.0.1:8080
+127.0.0.1:8081
+
+## 2. Banner lesen (zwei Dienste senden beim Verbinden einen Text)
+Port 2222: SSH-2.0-LabSSH_0.1
+Port 2121: 220 LabFTP 1.0 ready
+
+## 3. Webdienst: Kopfzeilen (ohne Datum)
+$ curl -sI 127.0.0.1:8080/
+HTTP/1.1 200 OK
+Server: ShopApp/1.0 
+Content-Type: text/html; charset=utf-8
+Content-Length: 55
+
+
+## 4. robots.txt: Hinweise für Suchmaschinen, die auch Pfade verraten
+$ curl -s 127.0.0.1:8080/robots.txt
+User-agent: *
+Disallow: /admin
+Disallow: /backup/
+
+## 5. Auswertung der Pfade aus robots.txt (nur Statuscodes, keine Inhalte betrachten)
+/admin     401
+/backup/   404
+
+## 6. Dasselbe passiv: was verrät der Dienst über sich?
+Server: ShopApp/1.0 

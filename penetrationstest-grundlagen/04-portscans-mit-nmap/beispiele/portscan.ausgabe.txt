@@ -1,0 +1,62 @@
+
+## 1. Einzelne Ports: offen und geschlossen
+$ nm -sT -p 2121,2222,8080,8081,9999 127.0.0.1
+Nmap scan report for localhost (127.0.0.1)
+
+PORT     STATE  SERVICE
+2121/tcp open   ccproxy-ftp
+2222/tcp open   EtherNetIP-1
+8080/tcp open   http-proxy
+8081/tcp open   blackice-icecap
+9999/tcp closed abyss
+
+
+## 2. Grund der Einstufung (--reason)
+$ nm -sT -p 8080,9999 --reason 127.0.0.1
+Nmap scan report for localhost (127.0.0.1)
+
+PORT     STATE  SERVICE    REASON
+8080/tcp open   http-proxy syn-ack
+9999/tcp closed abyss      conn-refused
+
+
+## 3. Portbereich 8000-8100 (nur offene Ports anzeigen)
+$ nm -sT -p 8000-8100 --open 127.0.0.1
+Nmap scan report for localhost (127.0.0.1)
+Not shown: 99 closed tcp ports (conn-refused)
+PORT     STATE SERVICE
+8080/tcp open  http-proxy
+8081/tcp open  blackice-icecap
+
+
+## 4. Grepbarer Export und Auswertung (offene Ports)
+2121 ccproxy-ftp
+2222 EtherNetIP-1
+8080 http-proxy
+8081 blackice-icecap
+Labor-Ports gefunden: 4
+Weitere offene Ports im Bereich gehören nicht zum Labor und werden hier nicht ausgewertet.
+
+## 5. Dienstname aus der Portnummer ist keine Dienst-Erkennung
+$ nm -sT -p 2121,2222 127.0.0.1
+Nmap scan report for localhost (127.0.0.1)
+
+PORT     STATE SERVICE
+2121/tcp open  ccproxy-ftp
+2222/tcp open  EtherNetIP-1
+
+Die Namen stammen aus der Portliste von nmap; der Banner (Modul 3) zeigt, dass auf 2222 kein SSH-Standardport, aber ein SSH-Banner liegt.
+
+## 6. Mit Banner-Skript: nmap liest die Banner
+$ nm -sT -p 2121,2222 --script banner 127.0.0.1
+Nmap scan report for localhost (127.0.0.1)
+
+PORT     STATE SERVICE
+2121/tcp open  ccproxy-ftp
+|_banner: 220 LabFTP 1.0 ready
+2222/tcp open  EtherNetIP-1
+|_banner: SSH-2.0-LabSSH_0.1
+
+
+## 7. Hinweis zu -sV
+Die Versionserkennung (-sV) dauerte im Test rund 90 Sekunden für vier Ports und wurde nicht in die Übung aufgenommen.

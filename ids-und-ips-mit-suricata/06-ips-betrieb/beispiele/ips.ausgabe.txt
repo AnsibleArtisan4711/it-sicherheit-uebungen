@@ -1,0 +1,24 @@
+
+## 1. Unterstützt diese Suricata-Version den NFQ-Modus? (Übersetzungsoptionen)
+NFQ
+
+## 2. Regeln mit den Aktionen alert, drop und reject
+alert http any any -> any any
+    (msg:"LAB alert: /geheim"; flow:established,to_server; http.uri; content:"/geheim"; startswith; sid:1000601; rev:1;)
+drop http any any -> any any
+    (msg:"LAB drop: ../ im Pfad"; flow:established,to_server; http.uri.raw; content:"../"; sid:1000602; rev:1;)
+reject tcp any any -> any 22
+    (msg:"LAB reject: Verbindung zu Port 22"; flags:S,12; sid:1000603; rev:1;)
+
+## 3. Lauf offline (fast.log): drop und reject erscheinen mit Kennzeichen [wDrop]
+[**] [1:1000601:1] LAB alert: /geheim [**] {TCP} A:P -> 127.0.0.1:P
+[wDrop] [**] [1:1000602:1] LAB drop: ../ im Pfad [**] {TCP} A:P -> 127.0.0.1:P
+[wDrop] [**] [1:1000603:1] LAB reject: Verbindung zu Port 22 [**] {TCP} A:P -> 127.0.0.1:P
+
+## 4. Aktion je Meldung in eve.json (Beobachtung dieses Laufs)
+1000601 allowed
+1000602 allowed
+1000603 blocked
+
+## 5. Hat der Lauf etwas verworfen? Der Mitschnitt ist unverändert, alle Pakete wurden gelesen
+i: pcap: read 1 file, 89 packets, 10172 bytes

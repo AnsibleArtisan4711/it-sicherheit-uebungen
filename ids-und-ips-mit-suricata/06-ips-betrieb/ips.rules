@@ -1,0 +1,4 @@
+# Modul 6: Aktionen alert, drop und reject (Offline-Modus: es wird nichts verworfen, nur markiert).
+alert http any any -> any any (msg:"LAB alert: /geheim"; flow:established,to_server; http.uri; content:"/geheim"; startswith; sid:1000601; rev:1;)
+drop http any any -> any any (msg:"LAB drop: ../ im Pfad"; flow:established,to_server; http.uri.raw; content:"../"; sid:1000602; rev:1;)
+reject tcp any any -> any 22 (msg:"LAB reject: Verbindung zu Port 22"; flags:S,12; sid:1000603; rev:1;)

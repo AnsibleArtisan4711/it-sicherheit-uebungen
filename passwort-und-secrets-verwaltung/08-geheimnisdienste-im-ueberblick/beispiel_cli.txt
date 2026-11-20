@@ -1,0 +1,6 @@
+# Befehle eines Geheimnisdienstes (OpenBao oder HashiCorp Vault), NICHT ausgeführt, nicht bestätigt (Fachwissen):
+#   bao server -dev                       # Entwicklungsserver (nur Test!)
+#   bao kv put secret/web db_password=...
+#   bao kv get secret/web
+#   bao policy write web-lesen web.hcl
+# Der Befehlsname (bao bzw. vault), Lizenzmodell und aktuelle Version wurden NICHT recherchiert; vor dem Einsatz mit Stand prüfen.

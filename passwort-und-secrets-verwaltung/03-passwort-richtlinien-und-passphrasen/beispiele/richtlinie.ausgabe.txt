@@ -1,0 +1,18 @@
+
+## 1. Prüfer (Regeln: mindestens 12 Zeichen, nicht in der Sperrliste, keine Wiederholung, nicht der Benutzername)
+Sommer2026!              zu kurz (<12); enthält Wort der Sperrliste
+anna-ist-hier-1          enthält den Benutzernamen
+aaaaBBBB1234             vier gleiche Zeichen hintereinander
+kuh-lampe-wolke-tisch    OK
+Willkommen1xyz           enthält Wort der Sperrliste
+kurz                     zu kurz (<12)
+
+## 2. Passphrase aus zufällig gewählten Wörtern (Wortliste mit 10 Wörtern nur zur Demonstration)
+Aufbau: vier Wörter, getrennt durch Bindestriche, z. B. Form wort-wort-wort-wort
+Entropie bei 10 Wörtern und 4 Ziehungen: 13.3 Bit (zu wenig; echte Liste hat tausende Wörter)
+Entropie bei 7776 Wörtern und 4 Ziehungen: 51.7 Bit
+Erzeugtes Beispiel hat 4 Wörter
+
+## 3. secrets (kryptografisch sicher) gegen random (nicht für Geheimnisse): Merkmale
+random mit gleichem Startwert, zweimal gleich: True (vorhersagbar)
+secrets zweimal gleich: False (sehr unwahrscheinlich; Quelle: Betriebssystem)

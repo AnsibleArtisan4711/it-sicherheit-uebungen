@@ -1,0 +1,29 @@
+
+## 1. Version und Fähigkeiten
+This is Suricata version 7.0.3 RELEASE
+Features: NFQ PCAP_SET_BUFF AF_PACKET HAVE_PACKET_FANOUT LIBCAP_NG LIBNET1.1 HAVE_HTP_URI_NORMALIZE_HOOK PCRE_JIT HAVE_NSS HTTP2_DECOMPRESSION HAVE_LUA HAVE_LUAJIT HAVE_LIBJANSSON TLS TLS_C11 MAGIC RUST 
+
+## 2. Konfigurationsdatei prüfen (-T)
+Rückgabecode: 0
+i: suricata: Configuration provided was successfully loaded. Exiting.
+
+## 3. Verkehr erzeugen und mitschneiden
+Mitschnitt erste: 89 Pakete
+
+## 4. Eine Regel und der erste Lauf im Offline-Modus
+eve.json fast.log stats.log suri.out suricata.log 
+
+## 5. fast.log (kurze Meldung je Treffer)
+[**] [1:1000001:1] LAB Zugriff auf /geheim [**] [Classification: (null)] [Priority: 3] {TCP} A:P -> 127.0.0.1:P
+
+## 6. eve.json: Ereignisarten und Anzahl
+alert      1
+dns        4
+fileinfo   5
+flow       12
+http       5
+stats      1
+tls        1
+
+## 7. Meldung in eve.json (ausgewählte Felder)
+{'signature_id': 1000001, 'signature': 'LAB Zugriff auf /geheim', 'action': 'allowed', 'app_proto': 'http', 'uri': '/geheim/plan.txt'}

@@ -1,0 +1,7 @@
+# Modul 4: Regeln für DNS, TLS und HTTP-Felder.
+alert dns any any -> any any (msg:"LAB DNS-Name mit tunnel"; dns.query; content:"tunnel"; nocase; sid:1000401; rev:1;)
+alert dns any any -> any any (msg:"LAB sehr langer DNS-Name"; dns.query; content:"-"; pcre:"/^[a-z0-9.-]{40,}$/"; sid:1000402; rev:1;)
+alert tls any any -> any any (msg:"LAB TLS-Name shop.example.org"; tls.sni; content:"shop.example.org"; sid:1000403; rev:1;)
+alert tls any any -> any any (msg:"LAB selbstsigniertes Zertifikat"; tls.cert_subject; content:"CN=lab.example.com"; sid:1000404; rev:1;)
+alert http any any -> any any (msg:"LAB HTTP-Methode GET auf Port 8080"; flow:established,to_server; http.method; content:"GET"; sid:1000405; rev:1;)
+alert http any any -> any any (msg:"LAB Host-Header 127.0.0.1:8080"; flow:established,to_server; http.host; content:"127.0.0.1"; sid:1000406; rev:1;)

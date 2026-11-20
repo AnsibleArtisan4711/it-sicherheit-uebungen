@@ -1,0 +1,32 @@
+
+## 1. Welche Regeldateien lädt die Standardkonfiguration?
+default-rule-path: /var/lib/suricata/rules
+rule-files: ['suricata.rules']
+app-layer-events.rules
+decoder-events.rules
+dhcp-events.rules
+dnp3-events.rules
+dns-events.rules
+files.rules
+ftp-events.rules
+http-events.rules
+http2-events.rules
+ipsec-events.rules
+Dateien in /etc/suricata/rules: 22
+
+## 2. Zwei eigene Regeldateien anlegen (lokal.rules, intern.rules)
+lokal.rules: 2 Regeln, intern.rules: 2 Regeln
+
+## 3. Doppelte SIDs über alle Dateien finden
+1000701 [('intern.rules', '2'), ('lokal.rules', '1')] <- DOPPELT
+1000702 [('lokal.rules', '1')] 
+1000703 [('intern.rules', '1')] 
+
+## 4. Laden mit zwei Dateien (-T) und mit doppelter SID
+W: detect-parse: Signature with newer revision, so the older sig replaced by this new signature "alert http any any -> any any (msg:"LAB geheim (zweite Fassung)"; flow:established,to_server; http.uri; content:"/geheim"; sid:1000701; rev:2;)"
+W: detect: rule 1000703: SYN-only to port(s) 22:22 w/o direction specified, disabling for toclient direction
+i: suricata: Configuration provided was successfully loaded. Exiting.
+
+## 5. Eine Regel ändern: rev erhöhen
+vorher: sid:1000701; rev:1
+nachher: sid:1000701; rev:3

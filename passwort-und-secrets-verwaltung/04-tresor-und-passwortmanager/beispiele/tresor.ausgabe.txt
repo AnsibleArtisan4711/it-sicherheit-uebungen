@@ -1,0 +1,19 @@
+
+## 1. Tresor anlegen (erfundene Zugangsdaten) und lesen
+Dateigröße: 220 Bytes; Klartext 'Beispiel' in der Datei? False
+Einträge: ['router', 'wiki']
+
+## 2. Falsche Passphrase
+InvalidToken: Entschlüsselung fehlgeschlagen, kein Teil der Daten lesbar
+
+## 3. Veränderung der Datei wird erkannt (ein Byte geändert)
+InvalidToken: Manipulation erkannt
+
+## 4. Zwei Tresore mit gleichem Inhalt und gleicher Passphrase sind verschieden (Salz und Nonce)
+Dateien gleich? False
+
+## 5. Zum Vergleich: gpg symmetrisch (AES-256), Passphrase über Datei
+gpg: keybox '/tmp/p63/gnupg/pubring.kbx' created
+Chiffrat enthält Klartext 'Beispiel'? 0
+router-pw=Beispiel-2
+gpg: decryption failed: Bad session key

@@ -1,0 +1,8 @@
+# Regelquellen und suricata-update, NICHT ausgeführt, nicht bestätigt (Fachwissen):
+#   suricata-update                        # lädt Regelsätze aus konfigurierten Quellen und baut eine Datei (suricata.rules)
+#   suricata-update list-sources           # zeigt die verfügbaren Quellen
+#   suricata-update enable-source <name>   # aktiviert eine Quelle
+#   /etc/suricata/disable.conf             # Regeln abschalten (nach sid oder Muster)
+#   /etc/suricata/enable.conf              # Regeln einschalten
+#   /etc/suricata/modify.conf              # Regeln umschreiben (z. B. alert -> drop)
+# Lizenz und Nutzungsbedingungen jeder Regelquelle vor dem Einsatz prüfen; Bezug braucht Internet.

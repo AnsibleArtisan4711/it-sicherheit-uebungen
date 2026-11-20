@@ -1,0 +1,38 @@
+
+## 1. Regelsatz des Abschlussprojekts
+alert http any any -> any any
+    (msg:"PROJ Zugriff auf /geheim"; flow:established,to_server; http.uri; content:"/geheim"; startswith; classtype:policy-violation; sid:1000801; rev:1;)
+alert http any any -> any any
+    (msg:"PROJ Scanner-User-Agent"; flow:established,to_server; http.user_agent; content:"sqlmap"; nocase; classtype:web-application-attack; sid:1000802; rev:1;)
+alert http any any -> any any
+    (msg:"PROJ Pfad ../"; flow:established,to_server; http.uri.raw; content:"../"; classtype:web-application-attack; sid:1000803; rev:1;)
+alert dns any any -> any any
+    (msg:"PROJ DNS-Tunnel-Verdacht"; dns.query; content:"tunnel"; classtype:bad-unknown; sid:1000804; rev:1;)
+alert tls any any -> any any
+    (msg:"PROJ TLS-Name shop.example.org"; tls.sni; content:"shop.example.org"; classtype:policy-violation; sid:1000805; rev:1;)
+alert tcp any any -> any [21,22,23,3389]
+    (msg:"PROJ Verbindung zu Verwaltungsport"; flow:to_server; flags:S,12; threshold:type limit, track by_src, count 1, seconds 60; classtype:attempted-recon; sid:1000806; rev:1;)
+
+## 2. Lauf und Kennzahlen aus stats.log
+app_layer.flow.dns_udp       2
+app_layer.flow.http          5
+app_layer.flow.tls           1
+decoder.bytes                10172
+decoder.pkts                 89
+detect.alert                 6
+flow.total                   12
+
+## 3. Bericht: Meldungen je Regel und je Priorität
+1000801   1 x  PROJ Zugriff auf /geheim
+1000802   1 x  PROJ Scanner-User-Agent
+1000803   1 x  PROJ Pfad ../
+1000804   1 x  PROJ DNS-Tunnel-Verdacht
+1000805   1 x  PROJ TLS-Name shop.example.org
+1000806   1 x  PROJ Verbindung zu Verwaltungsport
+je Schweregrad: {1: 4, 2: 2}
+
+## 4. Dauer eines Laufs
+Dauer unter 5 Sekunden: True
+
+## 5. Protokolldatei suricata.log: Warnungen und Fehler
+Zeilen mit E: oder W: 0

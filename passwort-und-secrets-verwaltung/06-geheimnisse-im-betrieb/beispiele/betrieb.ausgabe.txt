@@ -1,0 +1,24 @@
+
+## 1. Geheimnis als Argument: im Prozess für andere sichtbar (/proc/PID/cmdline)
+cmdline: python3 -c import time; time.sleep(30) --beispiel-passwort=Beispiel-Geheim-4 
+ps zeigt: python3 -c import time; time.sleep(30) --beispiel-passwort=Beispiel-Geheim-4
+
+## 2. Geheimnis in der Umgebung: nur für denselben Benutzer lesbar, aber an Kindprozesse vererbt
+Rechte von /proc/PID/environ: 400 root
+Inhalt (als derselbe Benutzer): APP_PASSWORD=Beispiel-Geheim-5
+Kindprozess sieht: Beispiel-Geheim-5
+
+## 3. Geheimnis in einer Datei: Standardrechte (umask 022) gegen umask 077 und chmod 600
+standard.txt 644
+umask077.txt 600
+chmod.txt 600
+Hinweis: Bei chmod nach dem Schreiben war die Datei kurz mit 644 lesbar; mit umask 077 vorher nie.
+
+## 4. Besser: Geheimnis aus Datei lesen, nicht über das Argument (Programm liest stdin oder Datei)
+cmdline: python3 -c import sys,time; pw=open(sys.argv[1]).read().strip(); time.sleep(2) <W>/pw 
+Das Argument nennt nur den Pfad der Datei, nicht den Wert.
+
+## 5. In Protokollen maskieren: Muster ersetzen, bevor eine Zeile geschrieben wird (Modell)
+login ok user=anna
+connect password=*** host=db01
+TOKEN=*** sent

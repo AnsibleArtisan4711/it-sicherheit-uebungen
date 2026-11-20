@@ -1,0 +1,33 @@
+
+## 1. Befunde sammeln (feste Prüfungen gegen das Labor, Rohdaten in der Datei befunde.tsv)
+B-1  Sicherung öffentlich abrufbar                W=3 A=3
+B-2  Suchausgabe nicht maskiert                    W=2 A=2
+B-3  Fehlerseite nennt interne Pfade               W=2 A=1
+B-4  Keine Sperre nach Fehlversuchen               W=2 A=2
+B-5  Server-Kopfzeile nennt Produkt und Version    W=1 A=1
+B-6  TRACE wird angeboten                          W=1 A=1
+
+## 2. Bewertung: Risiko = Wahrscheinlichkeit × Auswirkung (je 1 bis 3)
+B-1  Risiko 9 (hoch)  Sicherung öffentlich abrufbar
+B-2  Risiko 4 (mittel)  Suchausgabe nicht maskiert
+B-4  Risiko 4 (mittel)  Keine Sperre nach Fehlversuchen
+B-3  Risiko 2 (niedrig)  Fehlerseite nennt interne Pfade
+B-5  Risiko 1 (niedrig)  Server-Kopfzeile nennt Produkt und Version
+B-6  Risiko 1 (niedrig)  TRACE wird angeboten
+
+## 3. Berichtstext (Gerüst; Zahlen aus dieser Prüfung)
+Zusammenfassung
+Geprüft wurde ausschließlich das Beispiel-Labor (127.0.0.1) im vereinbarten Rahmen. Es wurden 6 Befunde festgestellt: 1 hoch, 2 mittel, 3 niedrig.
+Der wichtigste Befund ist B-1 (abrufbare Sicherung), weil dort Zugangsdaten stehen. Empfohlen wird, ihn zuerst zu beheben.
+
+Maßnahmenliste
+- B-1: Datei entfernen, Zugriff sperren, enthaltene Kennwörter ersetzen
+- B-2: Ausgabe maskieren (HTML-Escape), Eingaben prüfen
+- B-3: Allgemeine Fehlermeldung, Details nur ins Protokoll
+- B-4: Begrenzung und Wartezeit einführen
+- B-5: Angabe entfernen oder verkürzen
+- B-6: Methode deaktivieren
+
+## 4. Qualitätsprüfung des Berichts
+Jeder Befund hat Nummer, Titel, Bewertung und Empfehlung: 6 von 6 vollständig
+Bericht nennt keine echten Kennwörter: 0 Treffer in den Rohdaten (erwartet 0)

@@ -1,0 +1,48 @@
+
+## 1. nmap-Skripte (lesend): Titel, Server-Kopfzeile, Methoden, robots.txt
+$ nm -sT -p 8080 --script http-title,http-server-header,http-methods,http-robots.txt 127.0.0.1
+Nmap scan report for localhost (127.0.0.1)
+
+PORT     STATE SERVICE
+8080/tcp open  http-proxy
+|_http-title: Site doesn't have a title (text/html; charset=utf-8).
+| http-robots.txt: 2 disallowed entries 
+|_/admin /backup/
+| http-methods: 
+|   Supported Methods: GET POST OPTIONS TRACE HEAD
+|_  Potentially risky methods: TRACE
+|_http-server-header: ShopApp/1.0 
+
+
+## 2. Sicherheits-Kopfzeilen: nmap-Skript http-security-headers
+$ nm -sT -p 8080 --script http-security-headers 127.0.0.1
+Nmap scan report for localhost (127.0.0.1)
+
+PORT     STATE SERVICE
+8080/tcp open  http-proxy
+
+Das Skript gab hier nichts aus. Deutung (Fachwissen, nicht gegen die Dokumentation geprüft): Es listet nur vorhandene Kopfzeilen; die eigene Checkliste in Schritt 3 zeigt, was fehlt.
+
+## 3. Eigene Checkliste (Kopfzeilen, Methoden, Server-Angabe)
+FEHLT      X-Content-Type-Options
+FEHLT      X-Frame-Options
+FEHLT      Content-Security-Policy
+FEHLT      Strict-Transport-Security
+FEHLT      Referrer-Policy
+Server-Kopfzeile nennt Produkt: ja
+TRACE erlaubt laut OPTIONS: ja
+
+## 4. Verbose-Fehlerseite: nennt Pfade und Datenbank
+$ curl -s 127.0.0.1:8080/fehler
+Traceback (most recent call last):
+  File "/srv/shop/app.py", line 42, in bestellung
+KeyError: 'artikel'
+DB=sqlite:///srv/shop/shop.db
+
+## 5. Vergleich mit dem zweiten Dienst (Port 8081): gleiche Prüfung der Server-Kopfzeile
+Server: ShopApp/1.0 
+
+## 6. Was nmap-Skripte nicht ersetzen
+Skripte der Kategorie safe lesen nur; sie finden keine fachlichen Fehler der Anwendung. Prüfen Sie vor jedem Skript, was es tut (Quelltext und Kategorie).
+$ grep -m1 -n categories /usr/share/nmap/scripts/http-methods.nse
+69:categories = {"default", "safe"}

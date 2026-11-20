@@ -1,0 +1,25 @@
+
+## 1. Gleiches Passwort, einfacher Hash: SHA-256 ohne Salz (zweimal derselbe Wert)
+bc39dd530b3a762d086a0031394753e6d75a13efaecd2b32fb20d1eb67942588
+bc39dd530b3a762d086a0031394753e6d75a13efaecd2b32fb20d1eb67942588
+
+## 2. Mit Salz: PBKDF2-HMAC-SHA256, zwei Salze, gleiche Passwörter, verschiedene Werte
+00112233 19f185ad4d64a46955337cdf64c636d1
+ffeeddcc 97f8abbe658ec5f20c87c5c9a1902a1c
+
+## 3. Kosten: Zeit je Hash (Mittelwert aus 5 Läufen, Millisekunden, Rechner des Tests)
+SHA-256 (einfach)            0.0004 ms  (1× SHA-256)
+PBKDF2 100000 Runden        17.7649 ms  (49.061× SHA-256)
+PBKDF2 600000 Runden       104.7692 ms  (289.339× SHA-256)
+scrypt n=2^14,r=8,p=1       39.3589 ms  (108.697× SHA-256)
+bcrypt Kosten 10            76.7743 ms  (212.026× SHA-256)
+bcrypt Kosten 12           306.1878 ms  (845.591× SHA-256)
+
+## 4. bcrypt: Prüfen, Format und Kostenfaktor
+Länge: 60  Anfang: $2b$10$  (2b = Verfahren, 10 = Kosten)
+richtig: True  falsch: False
+zwei Hashes desselben Passworts gleich? False
+
+## 5. openssl passwd: SHA-512-Crypt (Format $6$)
+$6$abcdefgh$…
+Zweimal gleich: ja

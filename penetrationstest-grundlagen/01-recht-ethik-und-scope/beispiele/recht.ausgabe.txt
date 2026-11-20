@@ -1,0 +1,25 @@
+
+## 1. Auftragsdatei mit Pflichtangaben (erfundene Angaben)
+auftraggeber: Beispiel GmbH (erfunden)
+ansprechpartner: Frau Muster
+pruefer: Team Lab
+zeitraum: 2026-12-01 bis 2026-12-05
+im_scope: 127.0.0.1, 10.64.0.0/24
+ausserhalb: 10.64.0.99, Produktivsystem der Beispiel GmbH
+erlaubt: Portscan, Schwachstellenpruefung, Webtests ohne Datenveraenderung
+verboten: Denial-of-Service, Social Engineering, Zugriff auf echte Daten
+notfallkontakt: +49 000 0000000 (erfunden)
+
+## 2. Prüfer: sind alle Pflichtfelder vorhanden, und liegt ein Ziel im Scope?
+Pflichtfelder fehlen: keine
+127.0.0.1    IM SCOPE
+10.64.0.5    IM SCOPE
+10.64.0.99   NICHT im Scope: nicht testen
+10.65.0.1    NICHT im Scope: nicht testen
+203.0.113.7  NICHT im Scope: nicht testen
+
+## 3. Unvollständiger Auftrag wird erkannt
+Pflichtfelder fehlen: ['ausserhalb', 'notfallkontakt']
+
+## 4. Keine Erlaubnis, kein Test
+Die Datei ist ein Lernmodell. Sie ersetzt weder eine schriftliche Beauftragung noch eine rechtliche Beratung.

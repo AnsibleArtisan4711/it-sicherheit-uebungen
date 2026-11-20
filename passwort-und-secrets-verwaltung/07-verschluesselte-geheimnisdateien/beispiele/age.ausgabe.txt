@@ -1,0 +1,26 @@
+1.1.1
+
+## 1. Schlüsselpaare für zwei Personen erzeugen (anna, ben)
+öffentlicher Schlüssel (anna): age1uefu…  Länge 62
+Rechte der privaten Datei: 600
+
+## 2. Datei für beide Empfänger verschlüsseln
+Chiffrat enthält Klartext? 0
+age-encryption.org/v1
+
+
+## 3. Beide können entschlüsseln
+anna: db_password=Beispiel-Geheim-9
+ben:  db_password=Beispiel-Geheim-9
+
+## 4. Dritte Person (cara, nicht Empfänger) scheitert
+age: error: no identity matched any of the recipients
+age: report unexpected or unhelpful errors at https://filippo.io/age/report
+
+## 5. Empfänger entziehen: neu verschlüsseln nur für anna. Die alte Datei bleibt für ben lesbar.
+ben mit neuer Datei: age: error: no identity matched any of the recipients
+ben mit alter Datei: db_password=Beispiel-Geheim-9
+Folge: Wurde das Geheimnis einmal gelesen, hilft nur, das Geheimnis selbst zu ersetzen (Rotation).
+
+## 6. Hinweis
+Der Passphrase-Modus von age fragt am Terminal und wurde nicht ausgeführt.

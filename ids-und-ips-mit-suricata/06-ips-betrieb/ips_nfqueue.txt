@@ -1,0 +1,8 @@
+# Inline-Betrieb (IPS) unter Linux, NICHT ausgeführt, nicht bestätigt (Fachwissen):
+# 1. Pakete der Weiterleitung an die Warteschlange 0 übergeben (nftables):
+#      table inet filter { chain forward { type filter hook forward priority 0; policy accept; queue num 0 bypass } }
+#    "bypass": fällt Suricata aus, werden Pakete durchgelassen (Verfügbarkeit vor Sicherheit).
+# 2. Suricata im NFQ-Modus starten:
+#      suricata -c /etc/suricata/suricata.yaml -q 0
+# 3. Regeln mit der Aktion drop oder reject verwerfen dann Pakete tatsächlich.
+# Hinweis: Im Offline-Betrieb (-r Mitschnitt) wird nichts verworfen.

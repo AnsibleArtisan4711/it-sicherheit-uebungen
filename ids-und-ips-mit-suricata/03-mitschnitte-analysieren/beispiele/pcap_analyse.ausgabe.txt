@@ -1,0 +1,31 @@
+
+## 1. Der Mitschnitt in Zahlen (tcpdump)
+Pakete insgesamt: 91
+Pakete mit Port 8080: 62
+Pakete mit Port 53: 4
+Pakete mit Port 8443: 17
+Pakete mit Port 22: 2
+
+## 2. Suricata auf dem Mitschnitt (Regeln aus Modul 2)
+i: pcap: read 1 file, 91 packets, 10304 bytes
+Meldungen: 8
+
+## 3. Flows aus eve.json (Anwendungsprotokoll, Zustand, Pakete)
+-        TCP  Zielport 21    closed       2 Pakete
+-        TCP  Zielport 22    closed       2 Pakete
+-        TCP  Zielport 23    closed       2 Pakete
+dns      UDP  Zielport 53    established  2 Pakete
+dns      UDP  Zielport 53    established  2 Pakete
+-        TCP  Zielport 3389  closed       2 Pakete
+http     TCP  Zielport 8080  closed       13 Pakete
+http     TCP  Zielport 8080  closed       12 Pakete
+http     TCP  Zielport 8080  closed       12 Pakete
+http     TCP  Zielport 8080  closed       13 Pakete
+http     TCP  Zielport 8080  closed       12 Pakete
+tls      TCP  Zielport 8443  closed       17 Pakete
+
+## 4. Gleicher Mitschnitt, zweiter Lauf: gleiche Meldungen?
+ja, identisch
+
+## 5. Ohne Regeln: nur Protokolleinträge, keine Meldungen
+Meldungen: 0, Protokolleinträge in eve.json: 28

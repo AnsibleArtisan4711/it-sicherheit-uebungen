@@ -1,0 +1,20 @@
+
+## 1. Phasen (Modell): jede Phase hat Eingabe, Ergebnis und Beleg
+1 Vorbereitung   Auftrag, Scope, Regeln          -> Auftragsdatei
+2 Aufklärung     offene Dienste, Banner          -> Liste der Dienste
+3 Bewertung      Schwachstellen und Fehlkonfig.  -> Befunde mit Beleg
+4 Nachweis       nur soweit erlaubt, ohne Schaden -> kurzer Nachweis
+5 Bericht        Befunde, Risiko, Empfehlung      -> Bericht
+6 Nachbereitung  Daten löschen, Rückfragen        -> Abschluss
+
+## 2. Notizfunktion: laufende Nummer, Befund, Rohausgabe-Prüfsumme (Zeitstempel bewusst weggelassen)
+1 | niedrig  | Server-Header nennt Produkt und Version    | 45b23be7ad4faa18 | 1 Zeilen
+2 | niedrig  | robots.txt verrät sensible Pfade           | fe90e7c959454c37 | 3 Zeilen
+3 | hoch     | Sicherung öffentlich abrufbar              | e2f9bd79418b9248 | 3 Zeilen
+
+## 3. Beleg prüfen: derselbe Befehl liefert dieselbe Prüfsumme (Belege nur für feste Antworten)
+neu: e2f9bd79418b9248  gespeichert: e2f9bd79418b9248  gleich: ja
+
+## 4. Veränderliche Antworten: die Kopfzeile Date ändert sich, die Prüfsumme nicht wiederholbar
+Prüfsummen gleich: nein
+Belege deshalb mit Zeitpunkt und Rohdatei sichern.

@@ -1,0 +1,35 @@
+
+## 1. Regeln
+alert dns any any -> any any
+    (msg:"LAB DNS-Name mit tunnel"; dns.query; content:"tunnel"; nocase; sid:1000401; rev:1;)
+alert dns any any -> any any
+    (msg:"LAB sehr langer DNS-Name"; dns.query; content:"-"; pcre:"/^[a-z0-9.-]{40,}$/"; sid:1000402; rev:1;)
+alert tls any any -> any any
+    (msg:"LAB TLS-Name shop.example.org"; tls.sni; content:"shop.example.org"; sid:1000403; rev:1;)
+alert tls any any -> any any
+    (msg:"LAB selbstsigniertes Zertifikat"; tls.cert_subject; content:"CN=lab.example.com"; sid:1000404; rev:1;)
+alert http any any -> any any
+    (msg:"LAB HTTP-Methode GET auf Port 8080"; flow:established,to_server; http.method; content:"GET"; sid:1000405; rev:1;)
+alert http any any -> any any
+    (msg:"LAB Host-Header 127.0.0.1:8080"; flow:established,to_server; http.host; content:"127.0.0.1"; sid:1000406; rev:1;)
+
+## 2. Lauf
+sid 1000401: 1 x  LAB DNS-Name mit tunnel
+sid 1000402: 1 x  LAB sehr langer DNS-Name
+sid 1000403: 1 x  LAB TLS-Name shop.example.org
+sid 1000405: 5 x  LAB HTTP-Methode GET auf Port 8080
+sid 1000406: 5 x  LAB Host-Header 127.0.0.1:8080
+
+## 3. DNS-Ereignisse (Abfragen)
+www.example.com A
+lange-zufaellige-bezeichnung-abc123.tunnel.example.net A
+
+## 4. TLS-Ereignis (ausgewählte Felder)
+{'sni': 'shop.example.org', 'subject': None, 'version': 'TLS 1.3'}
+
+## 5. HTTP-Ereignisse (Methode, Adresse, Statuscode, User-Agent)
+GET /index.html 200 curl/8.5.0
+GET /geheim/plan.txt 200 curl/8.5.0
+GET /index.html?pfad=/geheim 200 curl/8.5.0
+GET /index.html 200 sqlmap/1.7
+GET /../../etc/passwd 404 curl/8.5.0

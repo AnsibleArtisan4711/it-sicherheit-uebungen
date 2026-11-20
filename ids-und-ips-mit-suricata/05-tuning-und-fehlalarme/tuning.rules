@@ -1,0 +1,5 @@
+# Modul 5: laute Regeln und ihre Entschärfung.
+alert tcp any any -> $HOME_NET any (msg:"LAB Verbindungsaufbau (SYN) auf beliebigen Port"; flow:to_server; flags:S,12; sid:1000501; rev:1;)
+alert http any any -> any any (msg:"LAB jede HTTP-Anfrage"; flow:established,to_server; http.method; content:"GET"; sid:1000502; rev:1;)
+alert http any any -> any any (msg:"LAB jede HTTP-Anfrage (Limit 2)"; flow:established,to_server; http.method; content:"GET"; threshold:type limit, track by_src, count 2, seconds 60; sid:1000503; rev:1;)
+alert http any any -> any any (msg:"LAB User-Agent sqlmap"; flow:established,to_server; http.user_agent; content:"sqlmap"; nocase; sid:1000504; rev:1;)

@@ -1,0 +1,35 @@
+
+## 1. Regeldatei (regeln.rules)
+alert http any any -> any any
+    (msg:"LAB Pfad beginnt mit /geheim"; flow:established,to_server; http.uri; content:"/geheim"; startswith; sid:1000001; rev:1;)
+alert http any any -> any any
+    (msg:"LAB /geheim irgendwo in der URL"; flow:established,to_server; http.uri; content:"/geheim"; sid:1000002; rev:1;)
+alert http any any -> any any
+    (msg:"LAB User-Agent sqlmap (nocase)"; flow:established,to_server; http.user_agent; content:"SQLMAP"; nocase; sid:1000003; rev:1;)
+alert http any any -> any any
+    (msg:"LAB HTTP-Antwort 200"; flow:established,to_client; http.stat_code; content:"200"; sid:1000004; rev:1;)
+
+## 2. Lauf
+[**] [1:1000001:1] LAB Pfad beginnt mit /geheim [**] {TCP} A:P -> 127.0.0.1:P
+[**] [1:1000002:1] LAB /geheim irgendwo in der URL [**] {TCP} A:P -> 127.0.0.1:P
+[**] [1:1000002:1] LAB /geheim irgendwo in der URL [**] {TCP} A:P -> 127.0.0.1:P
+[**] [1:1000003:1] LAB User-Agent sqlmap (nocase) [**] {TCP} A:P -> 127.0.0.1:P
+[**] [1:1000004:1] LAB HTTP-Antwort 200 [**] {TCP} A:P -> 127.0.0.1:P
+[**] [1:1000004:1] LAB HTTP-Antwort 200 [**] {TCP} A:P -> 127.0.0.1:P
+[**] [1:1000004:1] LAB HTTP-Antwort 200 [**] {TCP} A:P -> 127.0.0.1:P
+[**] [1:1000004:1] LAB HTTP-Antwort 200 [**] {TCP} A:P -> 127.0.0.1:P
+
+## 3. Unterschied: startswith (1000001) gegen reines content (1000002)
+sid 1000001: 1 Treffer
+sid 1000002: 2 Treffer
+sid 1000003: 1 Treffer
+sid 1000004: 4 Treffer
+
+## 4. Regel mit Syntaxfehler (unbekanntes Schlüsselwort)
+E: detect-parse: unknown rule keyword 'inhalt'.
+E: detect: error parsing signature "alert http any any -> any any (msg:"kaputt"; flow:established; http.uri; inhalt:"/geheim"; sid:1000009; rev:1;)" from file /tmp/p62/kaputt.rules at line 1
+E: suricata: Loading signatures failed.
+
+## 5. Regel ohne sid
+E: detect-parse: Signature missing required value "sid".
+E: detect: error parsing signature "alert http any any -> any any (msg:"ohne sid"; http.uri; content:"/geheim";)" from file /tmp/p62/ohnesid.rules at line 1

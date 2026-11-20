@@ -11,6 +11,9 @@ Praxisübungen zur IT-Sicherheit mit Windows und Linux im isolierten Labor. Jede
 | [`windows-server-haertung/`](windows-server-haertung/) | Windows-Server-Härtung (P13): 13 Module, 83,25 Stunden | Entwurf, nichts auf Windows ausgeführt; Auswertungsskripte (Python) mit erfundenen Daten im Container |
 | [`linux-server-haertung/`](linux-server-haertung/) | Linux-Server-Härtung (P14): 13 Module, 84 Stunden | Entwurf, Skripte in einer Testumgebung (Container) ausgeführt |
 | [`schwachstellenmanagement/`](schwachstellenmanagement/) | Schwachstellenmanagement (P15): 13 Module, 84,75 Stunden | Entwurf, Nmap-Scans in einer Testumgebung ausgeführt; Greenbone/Nessus und Windows nicht |
+| [`ids-und-ips-mit-suricata/`](ids-und-ips-mit-suricata/) | IDS und IPS mit Suricata (P62): 8 Module, 100 Unterrichtseinheiten | Entwurf, Skripte im Container mit Suricata 7.0.3 (Offline-Modus, Mitschnitte von Loopback) ausgeführt; Inline-Betrieb (IPS), `suricata-update` und Hyper-V nicht ausgeführt |
+| [`passwort-und-secrets-verwaltung/`](passwort-und-secrets-verwaltung/) | Passwort- und Secrets-Verwaltung (P63): 8 Module, 90 Unterrichtseinheiten | Entwurf, Skripte im Container mit `git`, `gpg` und `age` ausgeführt; OpenBao und Vault nicht ausgeführt (Modell), Hyper-V nicht |
+| [`penetrationstest-grundlagen/`](penetrationstest-grundlagen/) | Penetrationstest-Grundlagen (P64): 8 Module, 100 Unterrichtseinheiten | Entwurf, Skripte im Container mit nmap 7.94SVN und curl nur gegen `127.0.0.1` ausgeführt; Netzscans, Metasploit, Burp Suite, Schwachstellenscanner und Hyper-V nicht |
 
 ## Lizenz
 

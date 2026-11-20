@@ -1,0 +1,22 @@
+
+## 1. Eigener Scanner (Muster: password/secret/token/api_key mit Zuweisung eines festen Wertes) und Vergleich mit grep
+app.py:2: password = "Beispiel-Geheim-2"
+Treffer: 1
+Zum Vergleich, einfache Suche (grep -rin password, ohne .git):
+config.env:2:DB_PASSWORD=Beispiel-Geheim-1
+app.py:2:password = "Beispiel-Geheim-2"
+
+## 2. Falsche Lösung: Datei löschen und committen. Der Wert bleibt im Verlauf.
+Datei im aktuellen Stand vorhanden? nein
+Wert im Verlauf auffindbar? 2 Treffer in 'git log -p'
+
+## 3. Besser: Wert aus dem Code nehmen, Datei in .gitignore, Vorlage einchecken
+.gitignore app.py config.env.beispiel 
+Scanner nach der Änderung: Treffer: 0
+
+## 4. Was bleibt: der Wert steht weiterhin im Verlauf. Folge: Das Geheimnis ist als bekannt zu behandeln und zu ersetzen (Rotation).
+Treffer im Verlauf: 4
+
+## 5. Hook, der Commits mit Treffern verhindert (pre-commit, Nutzung des Scanners)
+pre-commit: mögliches Geheimnis in neu.py
+Rückgabecode des Commits: 1

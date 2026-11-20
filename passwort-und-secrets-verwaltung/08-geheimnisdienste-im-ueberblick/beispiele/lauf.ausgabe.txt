@@ -1,0 +1,13 @@
+1. Zugriff nach Richtlinie
+web   db/lesen  -> Wert-V1
+web   nas/lesen -> None
+2. Rotation: neue Ausleihe liefert den neuen Wert, alte Ausleihe hält den alten
+backup db/lesen -> Wert-V2
+3. Gültigkeit der Ausleihen zur Zeit t=7 (Ablauf nach ttl)
+web    db/lesen   bis t=5, Wert Wert-V1, gültig: False
+backup db/lesen   bis t=8, Wert Wert-V2, gültig: True
+4. Audit-Protokoll
+t=0 web     db/lesen   ERLAUBT ttl=5
+t=1 web     nas/lesen  VERWEIGERT
+t=2 admin   db/lesen   ROTIERT
+t=3 backup  db/lesen   ERLAUBT ttl=5

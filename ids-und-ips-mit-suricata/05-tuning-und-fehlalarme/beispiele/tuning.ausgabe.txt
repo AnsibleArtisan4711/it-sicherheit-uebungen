@@ -1,0 +1,16 @@
+
+## 1. Ausgangslage: Meldungen je Regel (sid:Anzahl)
+1000501:10  1000502:5  1000503:2  1000504:1
+
+## 2. Begrenzung in der Regel: sid 1000503 (limit 2) gegen sid 1000502 (ohne Begrenzung)
+Regel 1000502: 5 Meldungen; Regel 1000503: 2 Meldungen
+
+## 3. suppress in einer threshold-Datei: Regel 1000501 für das Ziel 127.0.0.1 unterdrücken (suppress kennt keine Ports)
+suppress gen_id 1, sig_id 1000501, track by_dst, ip 127.0.0.1
+1000502:5  1000503:2  1000504:1
+
+## 4. pass-Regel vor allen anderen: HTTP-Verbindungen vom Alarm ausnehmen
+1000501:10
+
+## 5. Regel abschalten: Zeile auskommentieren (sid 1000501)
+1000502:5  1000503:2  1000504:1

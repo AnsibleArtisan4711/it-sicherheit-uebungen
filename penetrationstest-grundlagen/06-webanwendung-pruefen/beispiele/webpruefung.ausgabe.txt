@@ -1,0 +1,31 @@
+
+## 1. Eingabe wird ungeprüft zurückgegeben? Harmloser Marker statt Schadcode
+unsicher: <p>Ergebnisse für: MARKER<b>x</b></p>
+sicher:   <p>Ergebnisse für: MARKER&lt;b&gt;x&lt;/b&gt;</p>
+Deutung: Im unsicheren Fall steht das Tag <b> unverändert im Ergebnis; im sicheren Fall ist es maskiert (&lt;b&gt;). Das ist die Voraussetzung für Cross-Site-Scripting; eine Ausnutzung wird nicht geübt.
+
+## 2. Dateien, die nicht öffentlich sein sollten (Pfade aus robots.txt und übliche Namen aus einer kurzen eigenen Liste)
+/admin               401
+/backup/db.bak.txt   200
+/backup/             404
+/.git/config         404
+/config.php          404
+/fehler              500
+
+## 3. Fund bewerten: Inhalt der Sicherung nur ansehen, nicht weiterverwenden
+# erfundene Sicherung
+kunde=Beispiel-Kunde
+passwort=***(erfundenes Beispiel, maskiert)
+
+## 4. Verbose Fehler (Statuscode 500) verrät interne Pfade
+Status: 500
+Zeilen mit internem Pfad: 2
+
+## 5. Zugriffsschutz: /admin ohne Anmeldung
+Status: 401 (401 = Anmeldung verlangt)
+
+## 6. Ergebnis als Befundliste
+W-1 hoch     Sicherung /backup/db.bak.txt öffentlich abrufbar
+W-2 mittel   Eingaben der Suche werden unmaskiert ausgegeben
+W-3 niedrig  Fehlerseite nennt Pfade und Datenbank
+W-4 niedrig  robots.txt nennt sensible Pfade

@@ -1,0 +1,29 @@
+
+## 1. Dienst ohne Sperre (Port 8080): sechs Fehlversuche mit demselben falschen Kennwort
+Versuch 1: 401
+Versuch 2: 401
+Versuch 3: 401
+Versuch 4: 401
+Versuch 5: 401
+Versuch 6: 401
+Danach richtiges Kennwort: 200 (200 = angemeldet)
+
+## 2. Dienst mit Sperre nach 3 Fehlversuchen (Port 8081)
+Versuch 1: 401
+Versuch 2: 401
+Versuch 3: 401
+Versuch 4: 429
+Versuch 5: 429
+Versuch 6: 429
+Danach richtiges Kennwort: 429 (429 = gesperrt)
+
+## 3. Sperre trifft das Konto, nicht den Angreifer: anderer Benutzername ist nicht gesperrt
+Benutzer anna, falsch: 401
+
+## 4. Bewertung (Modell)
+Ohne Sperre   : unbegrenzt viele Versuche; Schutz nur durch die Stärke des Kennworts
+Sperre je Konto: bremst Raten, erlaubt aber gezielte Aussperrung eines Benutzers (Denial of Service)
+Besser         : wachsende Wartezeit, Begrenzung je Quelladresse und je Konto, Mehr-Faktor, Meldung an die Überwachung
+
+## 5. Grenze der Übung
+Es werden keine Kennwortlisten und keine Fremdsysteme verwendet; die Übung prüft nur, ob der eigene Dienst begrenzt.
